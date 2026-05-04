@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2557">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AR Cartas">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Alameda del Río – Cartas</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul-noche:  #0f2557;
+  --azul-real:   #1a3a8f;
+  --azul-medio:  #2d5bbf;
+  --azul-claro:  #4a7ad4;
+  --azul-pale:   #d6e4ff;
+  --azul-bg:     #f0f4ff;
+  --dorado:      #f0a500;
+  --dorado-pale: #fff3cc;
+  --blanco:      #ffffff;
+  --gris-1:      #f7f9ff;
+  --gris-2:      #eef1f8;
+  --gris-3:      #c8d0e7;
+  --texto:       #0d1b3e;
+  --texto-2:     #4a5578;
+  --texto-3:     #8a95b8;
+  --verde:       #1a7a4a;
+  --verde-pale:  #d4f5e5;
+  --naranja:     #e05d20;
+  --naranja-pale:#fde8da;
+  --rojo:        #c0392b;
+  --sombra-sm:   0 2px 8px rgba(15,37,87,0.10);
+  --sombra-md:   0 4px 20px rgba(15,37,87,0.14);
+  --sombra-lg:   0 8px 40px rgba(15,37,87,0.18);
+  --radio:       12px;
+  --radio-lg:    18px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--gris-1);
+  color: var(--texto);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+/* ── HEADER ─────────────────────────────────────── */
+.app-header {
+  background: linear-gradient(135deg, var(--azul-noche) 0%, var(--azul-real) 100%);
+  color: white;
+  padding: 16px 20px 14px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 16px rgba(15,37,87,0.35);
+}
+
+.header-logo {
+  width: 42px; height: 42px; flex-shrink: 0;
+  background: var(--azul-medio);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.header-logo .sobre {
+  width: 28px; height: 20px;
+  background: white; border-radius: 3px;
+  position: relative;
+}
+.header-logo .solapa {
+  position: absolute; top: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 10px solid var(--azul-claro);
+}
+.header-logo .sello {
+  position: absolute; bottom: 2px; right: 2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--dorado);
+  font-size: 5px; font-weight: 700; color: var(--azul-noche);
+  display: flex; align-items: center; justify-content: center;
+}
+.header-text { flex: 1; }
+.header-text .titulo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.15rem; font-weight: 700;
+  letter-spacing: 0.04em; line-height: 1.1;
+}
+.header-text .subtitulo {
+  font-size: 0.72rem; opacity: 0.65;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px;
+}
+.header-estado {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; opacity: 0.8;
+}
+.dot-online { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+.dot-offline { width: 7px; height: 7px; border-radius: 50%; background: #fb923c; flex-shrink: 0; }
+
+/* ── TABS ────────────────────────────────────────── */
+.tabs-bar {
+  background: var(--azul-noche);
+  display: flex;
+  padding: 0 4px 0;
+  gap: 2px;
+  border-bottom: 3px solid var(--azul-real);
+}
+.tab-btn {
+  flex: 1; padding: 12px 4px 10px;
+  border: none; background: none; cursor: pointer;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: all .2s;
+}
+.tab-btn .tab-icon { font-size: 1.2rem; }
+.tab-btn.active { color: white; border-bottom-color: var(--dorado); }
+.tab-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
+
+/* ── CONTENIDO ───────────────────────────────────── */
+.main { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px; }
+.section { display: none; }
+.section.visible { display: block; }
+
+/* ── CARDS ───────────────────────────────────────── */
+.card {
+  background: white;
+  border-radius: var(--radio-lg);
+  padding: 22px 20px;
+  box-shadow: var(--sombra-sm);
+  margin-bottom: 16px;
+  border: 1px solid var(--gris-2);
+}
+.card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--azul-noche); letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+.card-desc { font-size: 0.82rem; color: var(--texto-3); margin-bottom: 18px; line-height: 1.5; }
+
+/* ── LOADING ─────────────────────────────────────── */
+.loading-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,37,87,0.55); z-index: 200;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+}
+.loading-overlay.show { display: flex; }
+.spinner {
+  width: 44px; height: 44px;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: var(--dorado);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-msg { color: white; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; }
+
+/* ── INPUTS & BOTONES ────────────────────────────── */
+.form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 4px; }
+.form-group { flex: 1; min-width: 140px; }
+.form-group label {
+  display: block; font-size: 0.75rem; font-weight: 600;
+  color: var(--texto-2); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.form-group input, .form-group select {
+  width: 100%; padding: 11px 14px;
+  border: 2px solid var(--gris-2);
+  border-radius: 8px;
+  font-family: 'Barlow', sans-serif; font-size: 0.95rem;
+  color: var(--texto);
+  transition: border-color .15s;
+  background: white;
+  -webkit-appearance: none;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none; border-color: var(--azul-claro);
+}
+
+.btn {
+  padding: 12px 22px; border: none; border-radius: 9px;
+  font-family: 'Barlow', sans-serif; font-size: 0.88rem;
+  font-weight: 700; cursor: pointer; letter-spacing: 0.04em;
+  transition: all .15s; display: inline-flex;
+  align-items: center; gap: 8px; white-space: nowrap;
+}
+.btn-primary { background: var(--azul-medio); color: white; }
+.btn-primary:hover { background: var(--azul-real); transform: translateY(-1px); box-shadow: var(--sombra-md); }
+.btn-primary:active { transform: none; }
+.btn-ghost { background: var(--azul-bg); color: var(--azul-real); }
+.btn-ghost:hover { background: var(--azul-pale); }
+.btn-dorado { background: var(--dorado); color: var(--azul-noche); }
+.btn-dorado:hover { background: #d89300; }
+.btn-verde { background: var(--verde); color: white; }
+.btn-verde:hover { filter: brightness(1.1); }
+.btn-danger { background: #fee2e2; color: var(--rojo); }
+.btn-danger:hover { background: #fecaca; }
+.btn-sm { padding: 8px 14px; font-size: 0.8rem; border-radius: 7px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ── BADGE / ESTADO ──────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase;
+}
+.badge-disponible { background: var(--gris-2); color: var(--texto-2); }
+.badge-elaborada  { background: var(--naranja-pale); color: var(--naranja); }
+.badge-entregada  { background: var(--verde-pale); color: var(--verde); }
+
+/* ── SELECCIÓN DE APTOS ──────────────────────────── */
+.seleccion-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+
+.apto-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radio);
+  border: 2px solid var(--azul-pale);
+  background: var(--gris-1);
+  animation: fadeUp .3s ease both;
+}
+.apto-item:nth-child(1) { animation-delay: .03s }
+.apto-item:nth-child(2) { animation-delay: .06s }
+.apto-item:nth-child(3) { animation-delay: .09s }
+.apto-item:nth-child(4) { animation-delay: .12s }
+.apto-item:nth-child(5) { animation-delay: .15s }
+.apto-item:nth-child(6) { animation-delay: .18s }
+.apto-item:nth-child(7) { animation-delay: .21s }
+.apto-item:nth-child(8) { animation-delay: .24s }
+.apto-item:nth-child(9) { animation-delay: .27s }
+.apto-item:nth-child(10){ animation-delay: .30s }
+.apto-item:nth-child(11){ animation-delay: .33s }
+.apto-item:nth-child(12){ animation-delay: .36s }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.apto-num {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: var(--azul-medio); color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.apto-info { flex: 1; min-width: 0; }
+.apto-info .conjunto { font-weight: 700; font-size: 0.95rem; color: var(--azul-noche); }
+.apto-info .dir { font-size: 0.8rem; color: var(--texto-2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.apto-info .detalle { font-size: 0.75rem; color: var(--texto-3); margin-top: 1px; }
+
+/* ── BARRA ACCIONES ──────────────────────────────── */
+.acciones-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid var(--gris-2);
+}
+
+/* ── LISTA PENDIENTES ────────────────────────────── */
+.search-input {
+  width: 100%; padding: 11px 14px 11px 40px;
+  border: 2px solid var(--gris-2); border-radius: 9px;
+  font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+  color: var(--texto); background: white;
+  margin-bottom: 14px;
+  transition: border-color .15s;
+  -webkit-appearance: none;
+}
+.search-input:focus { outline: none; border-color: var(--azul-claro); }
+.search-wrap { position: relative; }
+.search-icon {
+  position: absolute; left: 13px; top: 50%;
+  transform: translateY(-50%); font-size: 1rem;
+  pointer-events: none;
+}
+
+.pendiente-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radio);
+  border: 1.5px solid var(--gris-2);
+  background: white;
+  margin-bottom: 10px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.pendiente-item:hover { border-color: var(--azul-claro); box-shadow: var(--sombra-sm); }
+
+.pendiente-info { flex: 1; min-width: 0; }
+.pendiente-info .nombre { font-weight: 700; font-size: 0.92rem; }
+.pendiente-info .dir { font-size: 0.79rem; color: var(--texto-2); margin-top: 2px; }
+.pendiente-info .fecha { font-size: 0.74rem; color: var(--texto-3); margin-top: 3px; }
+
+.pendiente-btns { display: flex; gap: 8px; flex-shrink: 0; }
+
+/* ── ESTADÍSTICAS ────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: white;
+  border-radius: var(--radio-lg);
+  padding: 18px 16px;
+  box-shadow: var(--sombra-sm);
+  border: 1px solid var(--gris-2);
+  border-top: 4px solid var(--azul-medio);
+  text-align: center;
+}
+.stat-card.dorado   { border-top-color: var(--dorado); }
+.stat-card.verde    { border-top-color: var(--verde); }
+.stat-card.naranja  { border-top-color: var(--naranja); }
+
+.stat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem; font-weight: 700;
+  color: var(--azul-noche); line-height: 1;
+}
+.stat-card.dorado  .stat-num { color: var(--dorado); }
+.stat-card.verde   .stat-num { color: var(--verde); }
+.stat-card.naranja .stat-num { color: var(--naranja); }
+.stat-label { font-size: 0.72rem; color: var(--texto-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 5px; }
+
+/* ── BARRA PROGRESO ──────────────────────────────── */
+.prog-wrap { margin: 6px 0 16px; }
+.prog-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 6px;
+  color: var(--texto);
+}
+.prog-bar {
+  height: 10px; background: var(--gris-2);
+  border-radius: 99px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--azul-medio), var(--azul-claro));
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+}
+.prog-sublabel { font-size: 0.74rem; color: var(--texto-3); margin-top: 4px; }
+
+/* ── TABLA CONJUNTOS ─────────────────────────────── */
+.conj-table { width: 100%; border-collapse: collapse; }
+.conj-table th {
+  font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--texto-3);
+  padding: 8px 12px; text-align: left;
+  background: var(--gris-1); font-weight: 600;
+}
+.conj-table td { padding: 10px 12px; border-bottom: 1px solid var(--gris-2); font-size: 0.88rem; }
+.conj-table tr:last-child td { border-bottom: none; }
+.conj-table .mini-bar {
+  display: flex; align-items: center; gap: 8px;
+}
+.mini-bar .bar { flex: 1; height: 7px; background: var(--gris-2); border-radius: 99px; overflow: hidden; min-width: 50px; }
+.mini-bar .fill { height: 100%; border-radius: 99px; background: var(--verde); }
+.mini-bar .pct { font-size: 0.75rem; color: var(--texto-3); white-space: nowrap; }
+
+/* ── ACTIVIDADES ─────────────────────────────────── */
+.actividad-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 11px 14px;
+  border-radius: 9px; margin-bottom: 8px;
+  background: var(--gris-1);
+  border-left: 3px solid transparent;
+}
+.actividad-item.elaborada { border-left-color: var(--naranja); }
+.actividad-item.entregada { border-left-color: var(--verde); }
+.act-icon { font-size: 1.1rem; margin-top: 1px; flex-shrink: 0; }
+.act-info .nombre { font-weight: 600; font-size: 0.88rem; }
+.act-info .cuando { font-size: 0.75rem; color: var(--texto-3); margin-top: 2px; }
+
+/* ── EMPTY STATE ─────────────────────────────────── */
+.empty {
+  text-align: center; padding: 40px 20px;
+  color: var(--texto-3);
+}
+.empty-icon { font-size: 2.8rem; margin-bottom: 10px; }
+.empty-msg { font-size: 0.9rem; line-height: 1.6; }
+
+/* ── MODAL ───────────────────────────────────────── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,37,87,0.6);
+  z-index: 300; align-items: flex-end; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px 32px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  width: 100%; max-width: 540px;
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+.modal-handle {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: var(--gris-3); margin: 0 auto 20px;
+}
+.modal h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--azul-noche); margin-bottom: 10px;
+}
+.modal p { font-size: 0.9rem; color: var(--texto-2); line-height: 1.6; margin-bottom: 22px; }
+.modal-actions { display: flex; gap: 10px; }
+.modal-actions .btn { flex: 1; justify-content: center; }
+
+/* ── TOAST ───────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--azul-noche); color: white;
+  padding: 12px 22px; border-radius: 99px;
+  font-size: 0.88rem; font-weight: 600;
+  box-shadow: var(--sombra-lg);
+  opacity: 0; transition: all .3s;
+  z-index: 400; white-space: nowrap;
+  max-width: 90vw; text-align: center;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.toast.verde { background: var(--verde); }
+.toast.error { background: var(--rojo); }
+
+/* ── BANNER ERROR API ────────────────────────────── */
+.api-banner {
+  display: none; background: var(--naranja-pale);
+  border: 1.5px solid #f5c5a3;
+  border-radius: var(--radio); padding: 12px 16px;
+  font-size: 0.85rem; color: var(--naranja);
+  font-weight: 600; margin-bottom: 16px;
+  align-items: center; gap: 10px;
+}
+.api-banner.show { display: flex; }
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media(min-width: 540px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  .pendiente-btns { flex-direction: row; }
+}
+@media(max-width: 400px) {
+  .pendiente-btns { flex-direction: column; }
+  .btn-sm { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-msg" id="loading-msg">Cargando datos…</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3 id="modal-titulo"></h3>
+    <p id="modal-desc"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn btn-primary" id="modal-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-logo">
+    <div class="sobre">
+      <div class="solapa"></div>
+      <div class="sello">AR</div>
+    </div>
+  </div>
+  <div class="header-text">
+    <div class="titulo">Alameda del Río</div>
+    <div class="subtitulo">Gestión de Cartas</div>
+  </div>
+  <div class="header-estado">
+    <div class="dot-online" id="dot-estado"></div>
+    <span id="txt-estado">En línea</span>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('elaborar',this)" id="tab-elaborar">
+    <span class="tab-icon">✉️</span>Elaborar
+  </button>
+  <button class="tab-btn" onclick="showTab('entregar',this)" id="tab-entregar">
+    <span class="tab-icon">📬</span>Entregar
+  </button>
+  <button class="tab-btn" onclick="showTab('estadisticas',this)" id="tab-estadisticas">
+    <span class="tab-icon">📊</span>Estadísticas
+  </button>
+</nav>
+
+<main class="main">
+
+  <!-- ══════════ MÓDULO 1 – ELABORAR ══════════ -->
+  <section class="section visible" id="sec-elaborar">
+
+    <div class="api-banner" id="banner-error">
+      ⚠️ <span id="banner-msg">Sin conexión con el servidor.</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Generar selección de cartas</div>
+      <div class="card-desc">Indica cuántas cartas vas a escribir. El sistema escoge un apartamento por conjunto de forma aleatoria.</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Número de cartas</label>
+          <input type="number" id="num-cartas" min="1" max="12" value="6" inputmode="numeric">
+        </div>
+        <button class="btn btn-primary" onclick="generarSeleccion()" id="btn-generar">
+          🎲 Generar
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultado generado -->
+    <div id="bloque-seleccion" style="display:none">
+      <div class="card">
+        <div class="card-title">Selección propuesta</div>
+        <div class="card-desc">Un apartamento por conjunto. Al confirmar quedarán marcados como <strong>Elaborada</strong>.</div>
+        <div class="seleccion-list" id="lista-seleccion"></div>
+        <div class="acciones-bar">
+          <button class="btn btn-dorado" onclick="confirmarElaboracion()">✅ Confirmar elaboración</button>
+          <button class="btn btn-ghost" onclick="generarSeleccion()">🔄 Regenerar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cartas elaboradas (pendientes de entrega) -->
+    <div class="card">
+      <div class="card-title">Elaboradas – pendientes de entrega</div>
+      <div class="card-desc">Cartas listas pero aún no entregadas.</div>
+      <div id="lista-elaboradas"></div>
+    </div>
+
+  </section>
+
+  <!-- ══════════ MÓDULO 2 – ENTREGAR ══════════ -->
+  <section class="section" id="sec-entregar">
+    <div class="card">
+      <div class="card-title">Pendientes de entrega</div>
+      <div class="card-desc">Marca cada carta como entregada cuando la deposites en el apartamento.</div>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="search" class="search-input" id="filtro-entrega"
+          placeholder="Filtrar por conjunto o apartamento…"
+          oninput="renderPendientes()">
+      </div>
+      <div id="lista-pendientes"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ MÓDULO 3 – ESTADÍSTICAS ══════════ -->
+  <section class="section" id="sec-estadisticas">
+
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="card">
+      <div class="card-title">Progreso de entrega</div>
+      <div id="progreso-global"></div>
+      <div class="card-title" style="margin-top:16px">Por conjunto</div>
+      <div style="overflow-x:auto;margin-top:8px">
+        <table class="conj-table" id="tabla-conjuntos"></table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Últimas actividades</div>
+      <div class="card-desc">Registro de los 20 cambios más recientes.</div>
+      <div id="lista-actividades"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+// ──────────────────────────────────────────────────
+// CONFIGURACIÓN
+// ──────────────────────────────────────────────────
+const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU9QMcABOuWJCpKwoXbDyVv58e_LsC4SqKt6JnIspJ/exec';
+
+// ──────────────────────────────────────────────────
+// ESTADO EN MEMORIA (se recarga desde API)
+// ──────────────────────────────────────────────────
+let disponibles = [];   // aptos sin estado
+let elaboradas  = [];   // aptos con estado 'elaborada'
+let estadisticas = null;
+let seleccionActual = [];
+let modalCb = null;
+
+// ──────────────────────────────────────────────────
+// UTILIDADES
+// ──────────────────────────────────────────────────
+function fmt(a) {
+  let s = `Apto ${a.apto}`;
+  if (a.torre)    s += ` · Torre ${a.torre}`;
+  if (a.interior) s += ` · Int ${a.interior}`;
+  return s;
+}
+
+function fmtFecha(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' })
+    + ' ' + d.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' });
+}
+
+function diasDesde(iso) {
+  if (!iso) return '';
+  const diff = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  if (diff === 0) return 'hoy';
+  if (diff === 1) return 'ayer';
+  return `hace ${diff} días`;
+}
+
+function mostrarLoading(msg = 'Procesando…') {
+  document.getElementById('loading-msg').textContent = msg;
+  document.getElementById('loading').classList.add('show');
+}
+function ocultarLoading() {
+  document.getElementById('loading').classList.remove('show');
+}
+
+function showToast(msg, tipo = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (tipo ? ' ' + tipo : '');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function abrirModal(titulo, desc, btnLabel, cb) {
+  document.getElementById('modal-titulo').textContent = titulo;
+  document.getElementById('modal-desc').innerHTML = desc;
+  document.getElementById('modal-ok').textContent = btnLabel;
+  modalCb = cb;
+  document.getElementById('modal').classList.add('open');
+}
+function cerrarModal() {
+  document.getElementById('modal').classList.remove('open');
+  modalCb = null;
+}
+document.getElementById('modal-ok').onclick = () => { if (modalCb) modalCb(); };
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) cerrarModal();
+});
+
+function setOnline(ok) {
+  const dot = document.getElementById('dot-estado');
+  const txt = document.getElementById('txt-estado');
+  dot.className = ok ? 'dot-online' : 'dot-offline';
+  txt.textContent = ok ? 'En línea' : 'Sin conexión';
+}
+
+function showBanner(msg) {
+  const b = document.getElementById('banner-error');
+  document.getElementById('banner-msg').textContent = msg;
+  b.classList.add('show');
+}
+function hideBanner() {
+  document.getElementById('banner-error').classList.remove('show');
+}
+
+// ──────────────────────────────────────────────────
+// API CALLS
+// ──────────────────────────────────────────────────
+async function apiGet(action) {
+  const res = await fetch(`${API}?action=${action}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+async function apiPost(body) {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// ──────────────────────────────────────────────────
+// TABS
+// ──────────────────────────────────────────────────
+function showTab(tab, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('visible');
+  btn.classList.add('active');
+  if (tab === 'elaborar')     cargarElaboradas();
+  if (tab === 'entregar')     cargarPendientes();
+  if (tab === 'estadisticas') cargarEstadisticas();
+}
+
+// ──────────────────────────────────────────────────
+// MÓDULO 1 – ELABORAR
+// ──────────────────────────────────────────────────
+async function generarSeleccion() {
+  const n = Math.min(12, Math.max(1, parseInt(document.getElementById('num-cartas').value) || 6));
+  mostrarLoading('Consultando disponibles…');
+  try {
+    const res = await apiGet('disponibles');
+    setOnline(true); hideBanner();
+    disponibles = res.data || [];
+
+    // Agrupar por conjunto
+    const porConj = {};
+    disponibles.forEach(a => {
+      if (!porConj[a.conjunto]) porConj[a.conjunto] = [];
+      porConj[a.conjunto].push(a);
+    });
+    const conjuntos = Object.keys(porConj);
+    if (conjuntos.length === 0) {
+      showToast('No hay apartamentos disponibles', 'error');
+      ocultarLoading();
+      return;
+    }
+
+    const max = Math.min(n, conjuntos.length);
+    const mezclados = conjuntos.sort(() => Math.random() - 0.5).slice(0, max);
+    seleccionActual = mezclados.map(c => {
+      const lista = porConj[c];
+      return lista[Math.floor(Math.random() * lista.length)];
+    });
+
+    renderSeleccion();
+    document.getElementById('bloque-seleccion').style.display = 'block';
+    document.getElementById('bloque-seleccion').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch(e) {
+    setOnline(false);
+    showBanner('No se pudo conectar con el servidor. Verifica tu conexión.');
+    showToast('Error de conexión', 'error');
+  }
+  ocultarLoading();
+}
+
+function renderSeleccion() {
+  const lista = document.getElementById('lista-seleccion');
+  lista.innerHTML = seleccionActual.map((a, i) => `
+    <div class="apto-item">
+      <div class="apto-num">${i+1}</div>
+      <div class="apto-info">
+        <div class="conjunto">${a.conjunto}</div>
+        <div class="dir">📍 ${a.direccion}</div>
+        <div class="detalle">${fmt(a)}</div>
+      </div>
+      <span class="badge badge-disponible">Por elaborar</span>
+    </div>
+  `).join('');
+}
+
+async function confirmarElaboracion() {
+  if (!seleccionActual.length) return;
+  const lista = seleccionActual.map(a => `<li>${a.conjunto} – ${fmt(a)}</li>`).join('');
+  abrirModal(
+    'Confirmar elaboración',
+    `¿Confirmas que vas a elaborar estas ${seleccionActual.length} carta(s)?<br><ul style="margin:10px 0 0 16px;font-size:.85rem;color:#555">${lista}</ul>`,
+    '✅ Confirmar',
+    async () => {
+      cerrarModal();
+      mostrarLoading('Guardando en Google Sheets…');
+      try {
+        const ids = seleccionActual.map(a => a.id);
+        const res = await apiPost({ action: 'marcar_elaborada', ids, fecha: new Date().toISOString() });
+        if (res.ok) {
+          showToast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'verde');
+          seleccionActual = [];
+          document.getElementById('bloque-seleccion').style.display = 'none';
+          cargarElaboradas();
+        } else {
+          showToast('Error: ' + (res.error || 'desconocido'), 'error');
+        }
+      } catch(e) {
+        showToast('Error de conexión', 'error');
+      }
+      ocultarLoading();
+    }
+  );
+}
+
+async function cargarElaboradas() {
+  const contenedor = document.getElementById('lista-elaboradas');
+  contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div><div class="empty-msg">Cargando…</div></div>';
+  try {
+    const res = await apiGet('elaboradas');
+    elaboradas = res.data || [];
+    renderElaboradas();
+  } catch(e) {
+    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-msg">Error al cargar. Verifica conexión.</div></div>';
+  }
+}
+
+function renderElaboradas() {
+  const contenedor = document.getElementById('lista-elaboradas');
+  if (!elaboradas.length) {
+    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div class="empty-msg">No hay cartas elaboradas pendientes.</div></div>';
+    return;
+  }
+  contenedor.innerHTML = elaboradas.map(a => `
+    <div class="pendiente-item">
+      <div class="pendiente-info">
+        <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
+        <div class="dir">📍 ${a.direccion}</div>
+        <div class="fecha">✏️ Elaborada ${diasDesde(a.fecha_elaborada)} · ${fmtFecha(a.fecha_elaborada)}</div>
+      </div>
+      <span class="badge badge-elaborada">Elaborada</span>
+    </div>
+  `).join('');
+}
+
+// ──────────────────────────────────────────────────
+// MÓDULO 2 – ENTREGAR
+// ──────────────────────────────────────────────────
+async function cargarPendientes() {
+  const contenedor = document.getElementById('lista-pendientes');
+  contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div><div class="empty-msg">Cargando…</div></div>';
+  try {
+    const res = await apiGet('elaboradas');
+    elaboradas = res.data || [];
+    renderPendientes();
+  } catch(e) {
+    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-msg">Error al cargar. Verifica conexión.</div></div>';
+  }
+}
+
+function renderPendientes() {
+  const filtro = (document.getElementById('filtro-entrega')?.value || '').toLowerCase();
+  const contenedor = document.getElementById('lista-pendientes');
+  const lista = filtro
+    ? elaboradas.filter(a =>
+        a.conjunto.toLowerCase().includes(filtro) ||
+        a.apto.toLowerCase().includes(filtro) ||
+        a.direccion.toLowerCase().includes(filtro))
+    : elaboradas;
+
+  if (!elaboradas.length) {
+    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">🎉</div><div class="empty-msg">¡No hay cartas pendientes de entrega!</div></div>';
+    return;
+  }
+  if (!lista.length) {
+    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><div class="empty-msg">Sin resultados para ese filtro.</div></div>';
+    return;
+  }
+
+  contenedor.innerHTML = lista.map(a => `
+    <div class="pendiente-item" id="pend-${a.id}">
+      <div class="pendiente-info">
+        <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
+        <div class="dir">📍 ${a.direccion}</div>
+        <div class="fecha">✏️ Elaborada ${diasDesde(a.fecha_elaborada)} · ${fmtFecha(a.fecha_elaborada)}</div>
+      </div>
+      <div class="pendiente-btns">
+        <button class="btn btn-verde btn-sm" onclick="marcarEntregada(${a.id},'${a.conjunto}','${fmt(a).replace(/'/g,"\\'")}')">
+          📬 Entregada
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deshacerElaborada(${a.id},'${a.conjunto}')">
+          ↩️ Deshacer
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function marcarEntregada(id, conjunto, desc) {
+  abrirModal(
+    'Confirmar entrega',
+    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada en el apartamento?`,
+    '📬 Confirmar entrega',
+    async () => {
+      cerrarModal();
+      mostrarLoading('Registrando entrega…');
+      try {
+        const res = await apiPost({ action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
+        if (res.ok) {
+          elaboradas = elaboradas.filter(a => a.id !== id);
+          renderPendientes();
+          showToast('📬 Carta marcada como entregada', 'verde');
+        } else {
+          showToast('Error: ' + (res.error || 'desconocido'), 'error');
+        }
+      } catch(e) {
+        showToast('Error de conexión', 'error');
+      }
+      ocultarLoading();
+    }
+  );
+}
+
+async function deshacerElaborada(id, conjunto) {
+  abrirModal(
+    'Deshacer elaboración',
+    `¿Quieres devolver el apartamento de <strong>${conjunto}</strong> al estado disponible? Se borrarán las fechas registradas.`,
+    '↩️ Deshacer',
+    async () => {
+      cerrarModal();
+      mostrarLoading('Deshaciendo…');
+      try {
+        const res = await apiPost({ action: 'deshacer', ids: [id] });
+        if (res.ok) {
+          elaboradas = elaboradas.filter(a => a.id !== id);
+          renderPendientes();
+          showToast('↩️ Carta devuelta a disponible');
+        } else {
+          showToast('Error: ' + (res.error || 'desconocido'), 'error');
+        }
+      } catch(e) {
+        showToast('Error de conexión', 'error');
+      }
+      ocultarLoading();
+    }
+  );
+}
+
+// ──────────────────────────────────────────────────
+// MÓDULO 3 – ESTADÍSTICAS
+// ──────────────────────────────────────────────────
+async function cargarEstadisticas() {
+  mostrarLoading('Cargando estadísticas…');
+  try {
+    const res = await apiGet('estadisticas');
+    estadisticas = res;
+    renderEstadisticas();
+  } catch(e) {
+    showToast('Error al cargar estadísticas', 'error');
+  }
+  ocultarLoading();
+}
+
+function renderEstadisticas() {
+  if (!estadisticas) return;
+  const r = estadisticas.resumen;
+  const conj = estadisticas.por_conjunto;
+  const acts = estadisticas.ultimas_actividades || [];
+
+  // Cajas
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-num">${r.total.toLocaleString()}</div>
+      <div class="stat-label">Apartamentos</div>
+    </div>
+    <div class="stat-card naranja">
+      <div class="stat-num">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
+      <div class="stat-label">Cartas hechas</div>
+    </div>
+    <div class="stat-card verde">
+      <div class="stat-num">${r.entregadas.toLocaleString()}</div>
+      <div class="stat-label">Entregadas</div>
+    </div>
+    <div class="stat-card dorado">
+      <div class="stat-num">${r.pct_entregadas}%</div>
+      <div class="stat-label">% Cubierto</div>
+    </div>
+  `;
+
+  // Progreso global
+  document.getElementById('progreso-global').innerHTML = `
+    <div class="prog-wrap">
+      <div class="prog-label">
+        <span>Cartas entregadas</span>
+        <span style="color:var(--verde)">${r.pct_entregadas}%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
+      <div class="prog-sublabel">${r.entregadas} de ${r.total} apartamentos con carta entregada</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-label">
+        <span>Cartas elaboradas (total)</span>
+        <span style="color:var(--naranja)">${r.pct_hechas}%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_hechas}%;background:linear-gradient(90deg,var(--naranja),#f5a623)"></div></div>
+      <div class="prog-sublabel">${r.elaboradas + r.entregadas} de ${r.total} apartamentos con carta elaborada</div>
+    </div>
+  `;
+
+  // Tabla por conjunto
+  const conjList = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
+  document.getElementById('tabla-conjuntos').innerHTML = `
+    <thead><tr>
+      <th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th>
+    </tr></thead>
+    <tbody>
+    ${conjList.map(([nombre, d]) => {
+      const pct = ((d.entregadas / d.total) * 100).toFixed(0);
+      return `<tr>
+        <td><strong>${nombre}</strong></td>
+        <td>${d.total}</td>
+        <td style="color:var(--naranja);font-weight:700">${d.elaboradas}</td>
+        <td style="color:var(--verde);font-weight:700">${d.entregadas}</td>
+        <td>
+          <div class="mini-bar">
+            <div class="bar"><div class="fill" style="width:${pct}%"></div></div>
+            <div class="pct">${pct}%</div>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}
+    </tbody>
+  `;
+
+  // Actividades
+  const actDiv = document.getElementById('lista-actividades');
+  if (!acts.length) {
+    actDiv.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-msg">Sin actividad registrada aún.</div></div>';
+    return;
+  }
+  actDiv.innerHTML = acts.map(act => `
+    <div class="actividad-item ${act.tipo}">
+      <div class="act-icon">${act.tipo === 'elaborada' ? '✏️' : '📬'}</div>
+      <div class="act-info">
+        <div class="nombre">${act.apto.conjunto} – ${fmt(act.apto)}</div>
+        <div class="cuando">${act.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtFecha(act.fecha)} (${diasDesde(act.fecha)})</div>
+      </div>
+      <span class="badge ${act.tipo === 'elaborada' ? 'badge-elaborada' : 'badge-entregada'}">
+        ${act.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'}
+      </span>
+    </div>
+  `).join('');
+}
+
+// ──────────────────────────────────────────────────
+// CONECTIVIDAD
+// ──────────────────────────────────────────────────
+window.addEventListener('online',  () => setOnline(true));
+window.addEventListener('offline', () => setOnline(false));
+setOnline(navigator.onLine);
+
+// ──────────────────────────────────────────────────
+// SERVICE WORKER
+// ──────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+// ──────────────────────────────────────────────────
+// INICIO
+// ──────────────────────────────────────────────────
+cargarElaboradas();
+</script>
+</body>
+</html>
