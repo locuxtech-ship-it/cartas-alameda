@@ -109,14 +109,14 @@ body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(
 <nav class="tabs">
   <button class="tab active" onclick="goTab('elaborar',this)">✉️ Elaborar</button>
   <button class="tab" onclick="goTab('entregar',this)">📬 Entregar</button>
-  <button class="tab" onclick="goTab('stats',this)">📊 Stats</button>
+  <button class="tab" onclick="goTab('stats',this)">📊 Estadisticas</button>
 </nav>
 
 <!-- ELABORAR -->
 <div id="pg-elaborar" class="page on">
   <div class="card">
     <div class="card-h">Generar cartas</div>
-    <div class="field"><label>Cantidad (Aleatorio)</label><input type="number" id="n-cartas" value="6"></div>
+    <div class="field"><label>Cantidad (Aleatorio)</label><input type="number" id="n-cartas" value="1"></div>
     <div style="display:flex; gap:10px">
         <button class="btn btn-primary btn-full" onclick="generarAleatorio()">🎲 Aleatorio</button>
         <button class="btn btn-ghost btn-full" onclick="abrirManual()">🔍 Manual</button>
