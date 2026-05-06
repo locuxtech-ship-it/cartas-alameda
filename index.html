@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="AR Cartas">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Alameda del Río – Cartas</title>
+<title>Alameda del Río</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -22,9 +22,9 @@
   --dorado:      #f0a500;
   --dorado-pale: #fff3cc;
   --blanco:      #ffffff;
-  --gris-1:      #f7f9ff;
-  --gris-2:      #eef1f8;
-  --gris-3:      #c8d0e7;
+  --gris-1:      #f5f7fc;
+  --gris-2:      #eaecf4;
+  --gris-3:      #c4cade;
   --texto:       #0d1b3e;
   --texto-2:     #4a5578;
   --texto-3:     #8a95b8;
@@ -33,458 +33,330 @@
   --naranja:     #e05d20;
   --naranja-pale:#fde8da;
   --rojo:        #c0392b;
-  --sombra-sm:   0 2px 8px rgba(15,37,87,0.10);
-  --sombra-md:   0 4px 20px rgba(15,37,87,0.14);
-  --sombra-lg:   0 8px 40px rgba(15,37,87,0.18);
   --radio:       12px;
-  --radio-lg:    18px;
+  --radio-lg:    16px;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+html { font-size: 16px; }
 body {
   font-family: 'Barlow', sans-serif;
   background: var(--gris-1);
   color: var(--texto);
-  min-height: 100vh;
   min-height: 100dvh;
-  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ── HEADER ─────────────────────────────────────── */
-.app-header {
+/* ── HEADER ─────────────────────────────────── */
+.header {
   background: linear-gradient(135deg, var(--azul-noche) 0%, var(--azul-real) 100%);
   color: white;
-  padding: 16px 20px 14px;
-  padding-top: calc(16px + env(safe-area-inset-top));
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 2px 16px rgba(15,37,87,0.35);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top));
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 12px rgba(15,37,87,.4);
 }
-
-.header-logo {
-  width: 42px; height: 42px; flex-shrink: 0;
-  background: var(--azul-medio);
+.logo-box {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: rgba(255,255,255,.12);
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
 }
-.header-logo .sobre {
-  width: 28px; height: 20px;
-  background: white; border-radius: 3px;
-  position: relative;
+.logo-sobre {
+  width: 24px; height: 17px; background: white;
+  border-radius: 2px; position: relative;
 }
-.header-logo .solapa {
-  position: absolute; top: 0; left: 0;
-  width: 0; height: 0;
-  border-left: 14px solid transparent;
-  border-right: 14px solid transparent;
-  border-top: 10px solid var(--azul-claro);
+.logo-solapa {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 0; border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 9px solid var(--azul-claro);
 }
-.header-logo .sello {
-  position: absolute; bottom: 2px; right: 2px;
-  width: 10px; height: 10px; border-radius: 50%;
+.logo-sello {
+  position: absolute; bottom: 1px; right: 1px;
+  width: 9px; height: 9px; border-radius: 50%;
   background: var(--dorado);
   font-size: 5px; font-weight: 700; color: var(--azul-noche);
   display: flex; align-items: center; justify-content: center;
 }
-.header-text { flex: 1; }
-.header-text .titulo {
+.header-title { flex: 1; }
+.header-title strong {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.15rem; font-weight: 700;
-  letter-spacing: 0.04em; line-height: 1.1;
+  font-size: 1.05rem; font-weight: 700; letter-spacing: .04em;
+  display: block;
 }
-.header-text .subtitulo {
-  font-size: 0.72rem; opacity: 0.65;
-  letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px;
+.header-title span { font-size: .7rem; opacity: .6; letter-spacing: .08em; text-transform: uppercase; }
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  background: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74,222,128,.3);
 }
-.header-estado {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.72rem; opacity: 0.8;
-}
-.dot-online { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
-.dot-offline { width: 7px; height: 7px; border-radius: 50%; background: #fb923c; flex-shrink: 0; }
+.status-dot.off { background: #fb923c; box-shadow: 0 0 0 2px rgba(251,146,60,.3); }
 
-/* ── TABS ────────────────────────────────────────── */
-.tabs-bar {
-  background: var(--azul-noche);
+/* ── TABS ────────────────────────────────────── */
+.tabs {
+  background: #0b1d47;
   display: flex;
-  padding: 0 4px 0;
-  gap: 2px;
-  border-bottom: 3px solid var(--azul-real);
+  position: sticky; top: calc(62px + env(safe-area-inset-top)); z-index: 49;
 }
-.tab-btn {
-  flex: 1; padding: 12px 4px 10px;
-  border: none; background: none; cursor: pointer;
-  color: rgba(255,255,255,0.5);
-  font-family: 'Barlow', sans-serif;
-  font-size: 0.72rem; font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
+.tab {
+  flex: 1; border: none; background: none; cursor: pointer;
+  color: rgba(255,255,255,.45);
+  font-family: 'Barlow', sans-serif; font-weight: 600;
+  font-size: .68rem; letter-spacing: .07em; text-transform: uppercase;
+  padding: 10px 4px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
   border-bottom: 3px solid transparent;
-  margin-bottom: -3px;
-  transition: all .2s;
+  transition: color .15s, border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-.tab-btn .tab-icon { font-size: 1.2rem; }
-.tab-btn.active { color: white; border-bottom-color: var(--dorado); }
-.tab-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
+.tab .ico { font-size: 1.15rem; line-height: 1; }
+.tab.active { color: white; border-bottom-color: var(--dorado); }
 
-/* ── CONTENIDO ───────────────────────────────────── */
-.main { max-width: 680px; margin: 0 auto; padding: 20px 16px 100px; }
-.section { display: none; }
-.section.visible { display: block; }
+/* ── CONTENIDO ───────────────────────────────── */
+.page { display: none; padding: 16px 14px 90px; max-width: 600px; margin: 0 auto; }
+.page.on { display: block; }
 
-/* ── CARDS ───────────────────────────────────────── */
+/* ── CARD ────────────────────────────────────── */
 .card {
-  background: white;
-  border-radius: var(--radio-lg);
-  padding: 22px 20px;
-  box-shadow: var(--sombra-sm);
-  margin-bottom: 16px;
+  background: white; border-radius: var(--radio-lg);
+  padding: 18px 16px; margin-bottom: 14px;
+  box-shadow: 0 1px 6px rgba(15,37,87,.08);
   border: 1px solid var(--gris-2);
 }
-.card-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--azul-noche); letter-spacing: 0.03em;
-  margin-bottom: 4px;
-}
-.card-desc { font-size: 0.82rem; color: var(--texto-3); margin-bottom: 18px; line-height: 1.5; }
+.card-h { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--azul-noche); letter-spacing: .02em; margin-bottom: 3px; }
+.card-sub { font-size: .8rem; color: var(--texto-3); line-height: 1.45; margin-bottom: 16px; }
 
-/* ── LOADING ─────────────────────────────────────── */
-.loading-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(15,37,87,0.55); z-index: 200;
-  align-items: center; justify-content: center;
-  flex-direction: column; gap: 16px;
+/* ── FORM ────────────────────────────────────── */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: .72rem; font-weight: 600; color: var(--texto-2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+.field input, .field select {
+  width: 100%; padding: 12px 14px;
+  border: 2px solid var(--gris-2); border-radius: 9px;
+  font-family: 'Barlow', sans-serif; font-size: 1rem; color: var(--texto);
+  background: white; transition: border-color .15s;
+  -webkit-appearance: none; appearance: none;
 }
-.loading-overlay.show { display: flex; }
-.spinner {
-  width: 44px; height: 44px;
-  border: 4px solid rgba(255,255,255,0.2);
-  border-top-color: var(--dorado);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-msg { color: white; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.05em; }
+.field input:focus, .field select:focus { outline: none; border-color: var(--azul-claro); }
 
-/* ── INPUTS & BOTONES ────────────────────────────── */
-.form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 4px; }
-.form-group { flex: 1; min-width: 140px; }
-.form-group label {
-  display: block; font-size: 0.75rem; font-weight: 600;
-  color: var(--texto-2); text-transform: uppercase;
-  letter-spacing: 0.08em; margin-bottom: 6px;
-}
-.form-group input, .form-group select {
-  width: 100%; padding: 11px 14px;
-  border: 2px solid var(--gris-2);
-  border-radius: 8px;
-  font-family: 'Barlow', sans-serif; font-size: 0.95rem;
-  color: var(--texto);
-  transition: border-color .15s;
-  background: white;
-  -webkit-appearance: none;
-}
-.form-group input:focus, .form-group select:focus {
-  outline: none; border-color: var(--azul-claro);
-}
-
+/* ── BOTONES ─────────────────────────────────── */
 .btn {
-  padding: 12px 22px; border: none; border-radius: 9px;
-  font-family: 'Barlow', sans-serif; font-size: 0.88rem;
-  font-weight: 700; cursor: pointer; letter-spacing: 0.04em;
-  transition: all .15s; display: inline-flex;
-  align-items: center; gap: 8px; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 13px 20px; border: none; border-radius: 10px;
+  font-family: 'Barlow', sans-serif; font-size: .9rem; font-weight: 700;
+  cursor: pointer; letter-spacing: .03em;
+  transition: filter .15s, transform .1s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
 }
+.btn:active { transform: scale(.97); }
 .btn-primary { background: var(--azul-medio); color: white; }
-.btn-primary:hover { background: var(--azul-real); transform: translateY(-1px); box-shadow: var(--sombra-md); }
-.btn-primary:active { transform: none; }
-.btn-ghost { background: var(--azul-bg); color: var(--azul-real); }
-.btn-ghost:hover { background: var(--azul-pale); }
-.btn-dorado { background: var(--dorado); color: var(--azul-noche); }
-.btn-dorado:hover { background: #d89300; }
-.btn-verde { background: var(--verde); color: white; }
-.btn-verde:hover { filter: brightness(1.1); }
-.btn-danger { background: #fee2e2; color: var(--rojo); }
-.btn-danger:hover { background: #fecaca; }
-.btn-sm { padding: 8px 14px; font-size: 0.8rem; border-radius: 7px; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost   { background: var(--azul-bg); color: var(--azul-real); }
+.btn-ghost:hover { filter: brightness(.96); }
+.btn-dorado  { background: var(--dorado); color: var(--azul-noche); }
+.btn-verde   { background: var(--verde); color: white; }
+.btn-danger  { background: #fee2e2; color: var(--rojo); }
+.btn-full    { width: 100%; }
+.btn-sm      { padding: 9px 14px; font-size: .8rem; border-radius: 8px; }
+.btn:disabled { opacity: .45; pointer-events: none; }
 
-/* ── BADGE / ESTADO ──────────────────────────────── */
+/* ── ROW DE ACCIONES ─────────────────────────── */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--gris-2); }
+.btn-row .btn { flex: 1; min-width: 140px; }
+
+/* ── BADGE ───────────────────────────────────── */
 .badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: 20px;
-  font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.07em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 99px;
+  font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  white-space: nowrap; flex-shrink: 0;
 }
-.badge-disponible { background: var(--gris-2); color: var(--texto-2); }
-.badge-elaborada  { background: var(--naranja-pale); color: var(--naranja); }
-.badge-entregada  { background: var(--verde-pale); color: var(--verde); }
+.b-gris     { background: var(--gris-2); color: var(--texto-2); }
+.b-naranja  { background: var(--naranja-pale); color: var(--naranja); }
+.b-verde    { background: var(--verde-pale); color: var(--verde); }
 
-/* ── SELECCIÓN DE APTOS ──────────────────────────── */
-.seleccion-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
-
+/* ── ITEMS APTO ──────────────────────────────── */
+.apto-list { display: flex; flex-direction: column; gap: 9px; margin: 14px 0 0; }
 .apto-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px;
-  border-radius: var(--radio);
-  border: 2px solid var(--azul-pale);
-  background: var(--gris-1);
-  animation: fadeUp .3s ease both;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: var(--radio);
+  background: var(--gris-1); border: 1.5px solid var(--azul-pale);
+  animation: up .25s ease both;
 }
-.apto-item:nth-child(1) { animation-delay: .03s }
-.apto-item:nth-child(2) { animation-delay: .06s }
-.apto-item:nth-child(3) { animation-delay: .09s }
-.apto-item:nth-child(4) { animation-delay: .12s }
-.apto-item:nth-child(5) { animation-delay: .15s }
-.apto-item:nth-child(6) { animation-delay: .18s }
-.apto-item:nth-child(7) { animation-delay: .21s }
-.apto-item:nth-child(8) { animation-delay: .24s }
-.apto-item:nth-child(9) { animation-delay: .27s }
-.apto-item:nth-child(10){ animation-delay: .30s }
-.apto-item:nth-child(11){ animation-delay: .33s }
-.apto-item:nth-child(12){ animation-delay: .36s }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
-}
-
+@keyframes up { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:none;} }
 .apto-num {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
   background: var(--azul-medio); color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1rem; font-weight: 700;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
 }
 .apto-info { flex: 1; min-width: 0; }
-.apto-info .conjunto { font-weight: 700; font-size: 0.95rem; color: var(--azul-noche); }
-.apto-info .dir { font-size: 0.8rem; color: var(--texto-2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.apto-info .detalle { font-size: 0.75rem; color: var(--texto-3); margin-top: 1px; }
+.apto-info .conj { font-weight: 700; font-size: .92rem; }
+.apto-info .dir  { font-size: .77rem; color: var(--texto-2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.apto-info .det  { font-size: .72rem; color: var(--texto-3); margin-top: 1px; }
 
-/* ── BARRA ACCIONES ──────────────────────────────── */
-.acciones-bar {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  padding-top: 16px;
-  border-top: 1px solid var(--gris-2);
-}
-
-/* ── LISTA PENDIENTES ────────────────────────────── */
+/* ── PENDIENTES ──────────────────────────────── */
+.search-wrap { position: relative; margin-bottom: 12px; }
+.search-wrap .ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: .95rem; pointer-events: none; }
 .search-input {
-  width: 100%; padding: 11px 14px 11px 40px;
+  width: 100%; padding: 11px 14px 11px 38px;
   border: 2px solid var(--gris-2); border-radius: 9px;
-  font-family: 'Barlow', sans-serif; font-size: 0.9rem;
-  color: var(--texto); background: white;
-  margin-bottom: 14px;
-  transition: border-color .15s;
-  -webkit-appearance: none;
+  font-family: 'Barlow', sans-serif; font-size: .93rem; color: var(--texto);
+  background: white; transition: border-color .15s;
+  -webkit-appearance: none; appearance: none;
 }
 .search-input:focus { outline: none; border-color: var(--azul-claro); }
-.search-wrap { position: relative; }
-.search-icon {
-  position: absolute; left: 13px; top: 50%;
-  transform: translateY(-50%); font-size: 1rem;
-  pointer-events: none;
+
+.pend-item {
+  padding: 13px 14px; border-radius: var(--radio);
+  border: 1.5px solid var(--gris-2); background: white;
+  margin-bottom: 10px; transition: border-color .15s;
 }
+.pend-item:active { border-color: var(--azul-claro); }
+.pend-main { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.pend-info { flex: 1; min-width: 0; }
+.pend-info .nombre { font-weight: 700; font-size: .92rem; }
+.pend-info .dir    { font-size: .77rem; color: var(--texto-2); margin-top: 2px; }
+.pend-info .fecha  { font-size: .72rem; color: var(--texto-3); margin-top: 3px; }
+.pend-actions { display: flex; gap: 8px; }
+.pend-actions .btn { flex: 1; }
 
-.pendiente-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radio);
-  border: 1.5px solid var(--gris-2);
-  background: white;
-  margin-bottom: 10px;
-  transition: border-color .15s, box-shadow .15s;
-}
-.pendiente-item:hover { border-color: var(--azul-claro); box-shadow: var(--sombra-sm); }
-
-.pendiente-info { flex: 1; min-width: 0; }
-.pendiente-info .nombre { font-weight: 700; font-size: 0.92rem; }
-.pendiente-info .dir { font-size: 0.79rem; color: var(--texto-2); margin-top: 2px; }
-.pendiente-info .fecha { font-size: 0.74rem; color: var(--texto-3); margin-top: 3px; }
-
-.pendiente-btns { display: flex; gap: 8px; flex-shrink: 0; }
-
-/* ── ESTADÍSTICAS ────────────────────────────────── */
+/* ── STATS ───────────────────────────────────── */
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
 }
-.stat-card {
-  background: white;
-  border-radius: var(--radio-lg);
-  padding: 18px 16px;
-  box-shadow: var(--sombra-sm);
-  border: 1px solid var(--gris-2);
-  border-top: 4px solid var(--azul-medio);
-  text-align: center;
+.stat {
+  background: white; border-radius: var(--radio-lg);
+  padding: 16px 14px; text-align: center;
+  border: 1px solid var(--gris-2); border-top: 4px solid var(--azul-medio);
+  box-shadow: 0 1px 4px rgba(15,37,87,.06);
 }
-.stat-card.dorado   { border-top-color: var(--dorado); }
-.stat-card.verde    { border-top-color: var(--verde); }
-.stat-card.naranja  { border-top-color: var(--naranja); }
+.stat.s-dorado  { border-top-color: var(--dorado); }
+.stat.s-verde   { border-top-color: var(--verde); }
+.stat.s-naranja { border-top-color: var(--naranja); }
+.stat-n { font-family: 'Barlow Condensed', sans-serif; font-size: 1.9rem; font-weight: 700; color: var(--azul-noche); line-height: 1; }
+.stat.s-dorado  .stat-n { color: var(--dorado); }
+.stat.s-verde   .stat-n { color: var(--verde); }
+.stat.s-naranja .stat-n { color: var(--naranja); }
+.stat-l { font-size: .68rem; color: var(--texto-3); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
 
-.stat-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 2rem; font-weight: 700;
-  color: var(--azul-noche); line-height: 1;
-}
-.stat-card.dorado  .stat-num { color: var(--dorado); }
-.stat-card.verde   .stat-num { color: var(--verde); }
-.stat-card.naranja .stat-num { color: var(--naranja); }
-.stat-label { font-size: 0.72rem; color: var(--texto-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 5px; }
+/* ── PROGRESO ────────────────────────────────── */
+.prog { margin-bottom: 14px; }
+.prog-hd { display: flex; justify-content: space-between; font-size: .8rem; font-weight: 600; margin-bottom: 5px; }
+.prog-bar { height: 9px; background: var(--gris-2); border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--azul-medio), var(--azul-claro)); transition: width .8s cubic-bezier(.4,0,.2,1); }
+.prog-fill.orange { background: linear-gradient(90deg, var(--naranja), #f5a623); }
+.prog-sub { font-size: .72rem; color: var(--texto-3); margin-top: 3px; }
 
-/* ── BARRA PROGRESO ──────────────────────────────── */
-.prog-wrap { margin: 6px 0 16px; }
-.prog-label {
-  display: flex; justify-content: space-between;
-  font-size: 0.8rem; font-weight: 600; margin-bottom: 6px;
-  color: var(--texto);
-}
-.prog-bar {
-  height: 10px; background: var(--gris-2);
-  border-radius: 99px; overflow: hidden;
-}
-.prog-fill {
-  height: 100%; border-radius: 99px;
-  background: linear-gradient(90deg, var(--azul-medio), var(--azul-claro));
-  transition: width .8s cubic-bezier(.4,0,.2,1);
-}
-.prog-sublabel { font-size: 0.74rem; color: var(--texto-3); margin-top: 4px; }
-
-/* ── TABLA CONJUNTOS ─────────────────────────────── */
-.conj-table { width: 100%; border-collapse: collapse; }
-.conj-table th {
-  font-size: 0.72rem; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--texto-3);
-  padding: 8px 12px; text-align: left;
-  background: var(--gris-1); font-weight: 600;
-}
-.conj-table td { padding: 10px 12px; border-bottom: 1px solid var(--gris-2); font-size: 0.88rem; }
+/* ── TABLA CONJUNTOS ─────────────────────────── */
+.conj-table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+.conj-table th { font-size: .67rem; text-transform: uppercase; letter-spacing: .08em; color: var(--texto-3); padding: 7px 10px; background: var(--gris-1); text-align: left; font-weight: 600; }
+.conj-table td { padding: 9px 10px; border-bottom: 1px solid var(--gris-2); }
 .conj-table tr:last-child td { border-bottom: none; }
-.conj-table .mini-bar {
-  display: flex; align-items: center; gap: 8px;
-}
-.mini-bar .bar { flex: 1; height: 7px; background: var(--gris-2); border-radius: 99px; overflow: hidden; min-width: 50px; }
-.mini-bar .fill { height: 100%; border-radius: 99px; background: var(--verde); }
-.mini-bar .pct { font-size: 0.75rem; color: var(--texto-3); white-space: nowrap; }
+.mini-bar { display: flex; align-items: center; gap: 6px; }
+.mini-bar .b { flex: 1; height: 6px; background: var(--gris-2); border-radius: 99px; overflow: hidden; min-width: 40px; }
+.mini-bar .f { height: 100%; border-radius: 99px; background: var(--verde); }
+.mini-bar .p { font-size: .72rem; color: var(--texto-3); white-space: nowrap; }
 
-/* ── ACTIVIDADES ─────────────────────────────────── */
-.actividad-item {
-  display: flex; gap: 12px; align-items: flex-start;
-  padding: 11px 14px;
-  border-radius: 9px; margin-bottom: 8px;
-  background: var(--gris-1);
-  border-left: 3px solid transparent;
+/* ── ACTIVIDADES ─────────────────────────────── */
+.act-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 12px; border-radius: 9px; margin-bottom: 8px;
+  background: var(--gris-1); border-left: 3px solid var(--gris-3);
 }
-.actividad-item.elaborada { border-left-color: var(--naranja); }
-.actividad-item.entregada { border-left-color: var(--verde); }
-.act-icon { font-size: 1.1rem; margin-top: 1px; flex-shrink: 0; }
-.act-info .nombre { font-weight: 600; font-size: 0.88rem; }
-.act-info .cuando { font-size: 0.75rem; color: var(--texto-3); margin-top: 2px; }
+.act-item.elaborada { border-left-color: var(--naranja); }
+.act-item.entregada { border-left-color: var(--verde); }
+.act-ico { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.act-txt .n { font-weight: 600; font-size: .86rem; }
+.act-txt .f { font-size: .72rem; color: var(--texto-3); margin-top: 2px; }
 
-/* ── EMPTY STATE ─────────────────────────────────── */
-.empty {
-  text-align: center; padding: 40px 20px;
-  color: var(--texto-3);
+/* ── EMPTY STATE ─────────────────────────────── */
+.empty { text-align: center; padding: 32px 16px; color: var(--texto-3); }
+.empty .ei { font-size: 2.4rem; margin-bottom: 8px; }
+.empty .et { font-size: .88rem; line-height: 1.5; }
+
+/* ── BANNER ERROR ────────────────────────────── */
+.banner {
+  display: none; background: var(--naranja-pale);
+  border: 1.5px solid #f5c5a3; border-radius: var(--radio);
+  padding: 11px 14px; font-size: .83rem; color: var(--naranja);
+  font-weight: 600; margin-bottom: 14px; gap: 8px; align-items: center;
 }
-.empty-icon { font-size: 2.8rem; margin-bottom: 10px; }
-.empty-msg { font-size: 0.9rem; line-height: 1.6; }
+.banner.show { display: flex; }
 
-/* ── MODAL ───────────────────────────────────────── */
-.modal-overlay {
+/* ── LOADING ─────────────────────────────────── */
+.overlay {
   display: none; position: fixed; inset: 0;
-  background: rgba(15,37,87,0.6);
-  z-index: 300; align-items: flex-end; justify-content: center;
+  background: rgba(10,25,70,.58); z-index: 200;
+  align-items: center; justify-content: center; flex-direction: column; gap: 14px;
 }
-.modal-overlay.open { display: flex; }
-.modal {
-  background: white;
-  border-radius: 20px 20px 0 0;
-  padding: 28px 24px 32px;
-  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+.overlay.on { display: flex; }
+.spin {
+  width: 42px; height: 42px;
+  border: 4px solid rgba(255,255,255,.2); border-top-color: var(--dorado);
+  border-radius: 50%; animation: rot .65s linear infinite;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+.spin-msg { color: white; font-size: .88rem; font-weight: 600; letter-spacing: .04em; }
+
+/* ── MODAL (bottom sheet) ────────────────────── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(10,25,70,.55); z-index: 300;
+  align-items: flex-end; justify-content: center;
+}
+.modal-bg.on { display: flex; }
+.modal-box {
+  background: white; border-radius: 20px 20px 0 0;
+  padding: 24px 20px calc(28px + env(safe-area-inset-bottom));
   width: 100%; max-width: 540px;
-  animation: slideUp .25s ease;
+  animation: slideUp .22s ease;
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
-.modal-handle {
-  width: 40px; height: 4px; border-radius: 2px;
-  background: var(--gris-3); margin: 0 auto 20px;
-}
-.modal h3 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.25rem; font-weight: 700;
-  color: var(--azul-noche); margin-bottom: 10px;
-}
-.modal p { font-size: 0.9rem; color: var(--texto-2); line-height: 1.6; margin-bottom: 22px; }
-.modal-actions { display: flex; gap: 10px; }
-.modal-actions .btn { flex: 1; justify-content: center; }
+.modal-drag { width: 38px; height: 4px; border-radius: 2px; background: var(--gris-3); margin: 0 auto 18px; }
+.modal-box h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--azul-noche); margin-bottom: 8px; }
+.modal-box p  { font-size: .88rem; color: var(--texto-2); line-height: 1.6; margin-bottom: 20px; }
+.modal-row { display: flex; gap: 10px; }
+.modal-row .btn { flex: 1; }
 
-/* ── TOAST ───────────────────────────────────────── */
+/* ── TOAST ───────────────────────────────────── */
 .toast {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(80px);
+  position: fixed; bottom: 22px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
   background: var(--azul-noche); color: white;
-  padding: 12px 22px; border-radius: 99px;
-  font-size: 0.88rem; font-weight: 600;
-  box-shadow: var(--sombra-lg);
-  opacity: 0; transition: all .3s;
-  z-index: 400; white-space: nowrap;
-  max-width: 90vw; text-align: center;
+  padding: 11px 20px; border-radius: 99px;
+  font-size: .86rem; font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0,0,0,.22);
+  opacity: 0; transition: all .28s; z-index: 400;
+  white-space: nowrap; max-width: 88vw; text-align: center;
 }
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-.toast.verde { background: var(--verde); }
-.toast.error { background: var(--rojo); }
-
-/* ── BANNER ERROR API ────────────────────────────── */
-.api-banner {
-  display: none; background: var(--naranja-pale);
-  border: 1.5px solid #f5c5a3;
-  border-radius: var(--radio); padding: 12px 16px;
-  font-size: 0.85rem; color: var(--naranja);
-  font-weight: 600; margin-bottom: 16px;
-  align-items: center; gap: 10px;
-}
-.api-banner.show { display: flex; }
-
-/* ── RESPONSIVE ──────────────────────────────────── */
-@media(min-width: 540px) {
-  .stats-grid { grid-template-columns: repeat(4, 1fr); }
-  .pendiente-btns { flex-direction: row; }
-}
-@media(max-width: 400px) {
-  .pendiente-btns { flex-direction: column; }
-  .btn-sm { width: 100%; justify-content: center; }
-}
+.toast.on { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.ok  { background: var(--verde); }
+.toast.err { background: var(--rojo); }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-msg" id="loading-msg">Cargando datos…</div>
+<!-- OVERLAY LOADING -->
+<div class="overlay" id="ov">
+  <div class="spin"></div>
+  <div class="spin-msg" id="ov-msg">Procesando…</div>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <h3 id="modal-titulo"></h3>
-    <p id="modal-desc"></p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn btn-primary" id="modal-ok">Confirmar</button>
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <div class="modal-drag"></div>
+    <h3 id="m-titulo"></h3>
+    <p id="m-desc"></p>
+    <div class="modal-row">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" id="m-ok">Confirmar</button>
     </div>
   </div>
 </div>
@@ -493,583 +365,484 @@ body {
 <div class="toast" id="toast"></div>
 
 <!-- HEADER -->
-<header class="app-header">
-  <div class="header-logo">
-    <div class="sobre">
-      <div class="solapa"></div>
-      <div class="sello">AR</div>
+<header class="header">
+  <div class="logo-box">
+    <div class="logo-sobre">
+      <div class="logo-solapa"></div>
+      <div class="logo-sello">AR</div>
     </div>
   </div>
-  <div class="header-text">
-    <div class="titulo">Alameda del Río</div>
-    <div class="subtitulo">Gestión de Cartas</div>
+  <div class="header-title">
+    <strong>Alameda del Río</strong>
+    <span>Gestión de Cartas</span>
   </div>
-  <div class="header-estado">
-    <div class="dot-online" id="dot-estado"></div>
-    <span id="txt-estado">En línea</span>
-  </div>
+  <div class="status-dot" id="sdot"></div>
 </header>
 
 <!-- TABS -->
-<nav class="tabs-bar">
-  <button class="tab-btn active" onclick="showTab('elaborar',this)" id="tab-elaborar">
-    <span class="tab-icon">✉️</span>Elaborar
+<nav class="tabs">
+  <button class="tab active" onclick="goTab('elaborar',this)">
+    <span class="ico">✉️</span>Elaborar
   </button>
-  <button class="tab-btn" onclick="showTab('entregar',this)" id="tab-entregar">
-    <span class="tab-icon">📬</span>Entregar
+  <button class="tab" onclick="goTab('entregar',this)">
+    <span class="ico">📬</span>Entregar
   </button>
-  <button class="tab-btn" onclick="showTab('estadisticas',this)" id="tab-estadisticas">
-    <span class="tab-icon">📊</span>Estadísticas
+  <button class="tab" onclick="goTab('stats',this)">
+    <span class="ico">📊</span>Estadísticas
   </button>
 </nav>
 
-<main class="main">
+<!-- ══════ ELABORAR ══════ -->
+<div class="page on" id="pg-elaborar">
 
-  <!-- ══════════ MÓDULO 1 – ELABORAR ══════════ -->
-  <section class="section visible" id="sec-elaborar">
+  <div class="banner" id="banner">⚠️ <span id="banner-txt">Sin conexión con el servidor.</span></div>
 
-    <div class="api-banner" id="banner-error">
-      ⚠️ <span id="banner-msg">Sin conexión con el servidor.</span>
+  <div class="card">
+    <div class="card-h">Generar cartas</div>
+    <div class="card-sub">El sistema elige un apartamento por conjunto de forma aleatoria.</div>
+    <div class="field">
+      <label>¿Cuántas cartas vas a escribir?</label>
+      <input type="number" id="n-cartas" min="1" max="12" value="6" inputmode="numeric">
     </div>
+    <button class="btn btn-primary btn-full" onclick="generar()">🎲 Generar selección</button>
+  </div>
 
+  <div id="bloque-sel" style="display:none">
     <div class="card">
-      <div class="card-title">Generar selección de cartas</div>
-      <div class="card-desc">Indica cuántas cartas vas a escribir. El sistema escoge un apartamento por conjunto de forma aleatoria.</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Número de cartas</label>
-          <input type="number" id="num-cartas" min="1" max="12" value="6" inputmode="numeric">
-        </div>
-        <button class="btn btn-primary" onclick="generarSeleccion()" id="btn-generar">
-          🎲 Generar
-        </button>
+      <div class="card-h">Selección propuesta</div>
+      <div class="card-sub">Un apartamento por conjunto. Confirma para marcarlos como <strong>Elaborada</strong>.</div>
+      <div class="apto-list" id="lista-sel"></div>
+      <div class="btn-row">
+        <button class="btn btn-dorado" onclick="confirmar()">✅ Confirmar elaboración</button>
+        <button class="btn btn-ghost"  onclick="generar()">🔄 Regenerar</button>
       </div>
     </div>
+  </div>
 
-    <!-- Resultado generado -->
-    <div id="bloque-seleccion" style="display:none">
-      <div class="card">
-        <div class="card-title">Selección propuesta</div>
-        <div class="card-desc">Un apartamento por conjunto. Al confirmar quedarán marcados como <strong>Elaborada</strong>.</div>
-        <div class="seleccion-list" id="lista-seleccion"></div>
-        <div class="acciones-bar">
-          <button class="btn btn-dorado" onclick="confirmarElaboracion()">✅ Confirmar elaboración</button>
-          <button class="btn btn-ghost" onclick="generarSeleccion()">🔄 Regenerar</button>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-h">Elaboradas – sin entregar</div>
+    <div class="card-sub">Cartas listas pendientes de entrega.</div>
+    <div id="lista-elab"></div>
+  </div>
+</div>
+
+<!-- ══════ ENTREGAR ══════ -->
+<div class="page" id="pg-entregar">
+  <div class="card">
+    <div class="card-h">Pendientes de entrega</div>
+    <div class="card-sub">Marca la carta como entregada cuando la deposites en el apartamento.</div>
+    <div class="search-wrap">
+      <span class="ico">🔍</span>
+      <input type="search" class="search-input" id="filtro"
+        placeholder="Filtrar por conjunto o apartamento…" oninput="renderPend()">
     </div>
+    <div id="lista-pend"></div>
+  </div>
+</div>
 
-    <!-- Cartas elaboradas (pendientes de entrega) -->
-    <div class="card">
-      <div class="card-title">Elaboradas – pendientes de entrega</div>
-      <div class="card-desc">Cartas listas pero aún no entregadas.</div>
-      <div id="lista-elaboradas"></div>
+<!-- ══════ ESTADÍSTICAS ══════ -->
+<div class="page" id="pg-stats">
+  <div class="stats-grid" id="s-grid"></div>
+  <div class="card">
+    <div class="card-h">Progreso global</div>
+    <div id="s-progreso"></div>
+    <div class="card-h" style="margin-top:14px">Por conjunto</div>
+    <div style="overflow-x:auto;margin-top:8px">
+      <table class="conj-table" id="s-tabla"></table>
     </div>
-
-  </section>
-
-  <!-- ══════════ MÓDULO 2 – ENTREGAR ══════════ -->
-  <section class="section" id="sec-entregar">
-    <div class="card">
-      <div class="card-title">Pendientes de entrega</div>
-      <div class="card-desc">Marca cada carta como entregada cuando la deposites en el apartamento.</div>
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="search" class="search-input" id="filtro-entrega"
-          placeholder="Filtrar por conjunto o apartamento…"
-          oninput="renderPendientes()">
-      </div>
-      <div id="lista-pendientes"></div>
-    </div>
-  </section>
-
-  <!-- ══════════ MÓDULO 3 – ESTADÍSTICAS ══════════ -->
-  <section class="section" id="sec-estadisticas">
-
-    <div class="stats-grid" id="stats-grid"></div>
-
-    <div class="card">
-      <div class="card-title">Progreso de entrega</div>
-      <div id="progreso-global"></div>
-      <div class="card-title" style="margin-top:16px">Por conjunto</div>
-      <div style="overflow-x:auto;margin-top:8px">
-        <table class="conj-table" id="tabla-conjuntos"></table>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Últimas actividades</div>
-      <div class="card-desc">Registro de los 20 cambios más recientes.</div>
-      <div id="lista-actividades"></div>
-    </div>
-
-  </section>
-
-</main>
+  </div>
+  <div class="card">
+    <div class="card-h">Últimas actividades</div>
+    <div class="card-sub">Los 20 cambios más recientes.</div>
+    <div id="s-acts"></div>
+  </div>
+</div>
 
 <script>
-// ──────────────────────────────────────────────────
-// CONFIGURACIÓN
-// ──────────────────────────────────────────────────
+// ─── CONFIG ────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU9QMcABOuWJCpKwoXbDyVv58e_LsC4SqKt6JnIspJ/exec';
 
-// ──────────────────────────────────────────────────
-// ESTADO EN MEMORIA (se recarga desde API)
-// ──────────────────────────────────────────────────
-let disponibles = [];   // aptos sin estado
-let elaboradas  = [];   // aptos con estado 'elaborada'
-let estadisticas = null;
-let seleccionActual = [];
-let modalCb = null;
+// ─── ESTADO ─────────────────────────────────────────────
+let elaboradas  = [];
+let selActual   = [];
+let modalCb     = null;
 
-// ──────────────────────────────────────────────────
-// UTILIDADES
-// ──────────────────────────────────────────────────
-function fmt(a) {
+// ─── UTILIDADES ─────────────────────────────────────────
+const fmt = a => {
   let s = `Apto ${a.apto}`;
   if (a.torre)    s += ` · Torre ${a.torre}`;
   if (a.interior) s += ` · Int ${a.interior}`;
   return s;
-}
+};
 
-function fmtFecha(iso) {
+const fmtF = iso => {
   if (!iso) return '';
   const d = new Date(iso);
-  return d.toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' })
-    + ' ' + d.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' });
-}
+  return d.toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})
+    + ' ' + d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+};
 
-function diasDesde(iso) {
+const desde = iso => {
   if (!iso) return '';
-  const diff = Math.floor((Date.now() - new Date(iso)) / 86400000);
-  if (diff === 0) return 'hoy';
-  if (diff === 1) return 'ayer';
-  return `hace ${diff} días`;
-}
+  const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  return d === 0 ? 'hoy' : d === 1 ? 'ayer' : `hace ${d} días`;
+};
 
-function mostrarLoading(msg = 'Procesando…') {
-  document.getElementById('loading-msg').textContent = msg;
-  document.getElementById('loading').classList.add('show');
-}
-function ocultarLoading() {
-  document.getElementById('loading').classList.remove('show');
-}
+// ─── LOADING ─────────────────────────────────────────────
+const showOv  = msg => { document.getElementById('ov-msg').textContent = msg; document.getElementById('ov').classList.add('on'); };
+const hideOv  = ()  => document.getElementById('ov').classList.remove('on');
 
-function showToast(msg, tipo = '') {
+// ─── TOAST ───────────────────────────────────────────────
+let _tid;
+const toast = (msg, cls='') => {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show' + (tipo ? ' ' + tipo : '');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 3000);
-}
+  t.textContent = msg; t.className = 'toast on ' + cls;
+  clearTimeout(_tid); _tid = setTimeout(() => t.classList.remove('on'), 3000);
+};
 
-function abrirModal(titulo, desc, btnLabel, cb) {
-  document.getElementById('modal-titulo').textContent = titulo;
-  document.getElementById('modal-desc').innerHTML = desc;
-  document.getElementById('modal-ok').textContent = btnLabel;
+// ─── MODAL ───────────────────────────────────────────────
+const openModal = (titulo, desc, label, cb) => {
+  document.getElementById('m-titulo').textContent = titulo;
+  document.getElementById('m-desc').innerHTML = desc;
+  document.getElementById('m-ok').textContent = label;
   modalCb = cb;
-  document.getElementById('modal').classList.add('open');
-}
-function cerrarModal() {
-  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal').classList.add('on');
+};
+const closeModal = () => {
+  document.getElementById('modal').classList.remove('on');
   modalCb = null;
-}
-document.getElementById('modal-ok').onclick = () => { if (modalCb) modalCb(); };
+};
+document.getElementById('m-ok').onclick = () => { if (modalCb) modalCb(); };
 document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal')) cerrarModal();
+  if (e.target === document.getElementById('modal')) closeModal();
 });
 
-function setOnline(ok) {
-  const dot = document.getElementById('dot-estado');
-  const txt = document.getElementById('txt-estado');
-  dot.className = ok ? 'dot-online' : 'dot-offline';
-  txt.textContent = ok ? 'En línea' : 'Sin conexión';
-}
-
-function showBanner(msg) {
-  const b = document.getElementById('banner-error');
-  document.getElementById('banner-msg').textContent = msg;
-  b.classList.add('show');
-}
-function hideBanner() {
-  document.getElementById('banner-error').classList.remove('show');
-}
-
-// ──────────────────────────────────────────────────
-// API CALLS
-// ──────────────────────────────────────────────────
-async function apiGet(action) {
-  const res = await fetch(`${API}?action=${action}`);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-async function apiPost(body) {
-  const res = await fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-// ──────────────────────────────────────────────────
-// TABS
-// ──────────────────────────────────────────────────
-function showTab(tab, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + tab).classList.add('visible');
-  btn.classList.add('active');
-  if (tab === 'elaborar')     cargarElaboradas();
-  if (tab === 'entregar')     cargarPendientes();
-  if (tab === 'estadisticas') cargarEstadisticas();
-}
-
-// ──────────────────────────────────────────────────
-// MÓDULO 1 – ELABORAR
-// ──────────────────────────────────────────────────
-async function generarSeleccion() {
-  const n = Math.min(12, Math.max(1, parseInt(document.getElementById('num-cartas').value) || 6));
-  mostrarLoading('Consultando disponibles…');
-  try {
-    const res = await apiGet('disponibles');
-    setOnline(true); hideBanner();
-    disponibles = res.data || [];
-
-    // Agrupar por conjunto
-    const porConj = {};
-    disponibles.forEach(a => {
-      if (!porConj[a.conjunto]) porConj[a.conjunto] = [];
-      porConj[a.conjunto].push(a);
-    });
-    const conjuntos = Object.keys(porConj);
-    if (conjuntos.length === 0) {
-      showToast('No hay apartamentos disponibles', 'error');
-      ocultarLoading();
-      return;
-    }
-
-    const max = Math.min(n, conjuntos.length);
-    const mezclados = conjuntos.sort(() => Math.random() - 0.5).slice(0, max);
-    seleccionActual = mezclados.map(c => {
-      const lista = porConj[c];
-      return lista[Math.floor(Math.random() * lista.length)];
-    });
-
-    renderSeleccion();
-    document.getElementById('bloque-seleccion').style.display = 'block';
-    document.getElementById('bloque-seleccion').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } catch(e) {
-    setOnline(false);
-    showBanner('No se pudo conectar con el servidor. Verifica tu conexión.');
-    showToast('Error de conexión', 'error');
-  }
-  ocultarLoading();
-}
-
-function renderSeleccion() {
-  const lista = document.getElementById('lista-seleccion');
-  lista.innerHTML = seleccionActual.map((a, i) => `
-    <div class="apto-item">
-      <div class="apto-num">${i+1}</div>
-      <div class="apto-info">
-        <div class="conjunto">${a.conjunto}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="detalle">${fmt(a)}</div>
-      </div>
-      <span class="badge badge-disponible">Por elaborar</span>
-    </div>
-  `).join('');
-}
-
-async function confirmarElaboracion() {
-  if (!seleccionActual.length) return;
-  const lista = seleccionActual.map(a => `<li>${a.conjunto} – ${fmt(a)}</li>`).join('');
-  abrirModal(
-    'Confirmar elaboración',
-    `¿Confirmas que vas a elaborar estas ${seleccionActual.length} carta(s)?<br><ul style="margin:10px 0 0 16px;font-size:.85rem;color:#555">${lista}</ul>`,
-    '✅ Confirmar',
-    async () => {
-      cerrarModal();
-      mostrarLoading('Guardando en Google Sheets…');
-      try {
-        const ids = seleccionActual.map(a => a.id);
-        const res = await apiPost({ action: 'marcar_elaborada', ids, fecha: new Date().toISOString() });
-        if (res.ok) {
-          showToast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'verde');
-          seleccionActual = [];
-          document.getElementById('bloque-seleccion').style.display = 'none';
-          cargarElaboradas();
-        } else {
-          showToast('Error: ' + (res.error || 'desconocido'), 'error');
-        }
-      } catch(e) {
-        showToast('Error de conexión', 'error');
-      }
-      ocultarLoading();
-    }
-  );
-}
-
-async function cargarElaboradas() {
-  const contenedor = document.getElementById('lista-elaboradas');
-  contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div><div class="empty-msg">Cargando…</div></div>';
-  try {
-    const res = await apiGet('elaboradas');
-    elaboradas = res.data || [];
-    renderElaboradas();
-  } catch(e) {
-    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-msg">Error al cargar. Verifica conexión.</div></div>';
-  }
-}
-
-function renderElaboradas() {
-  const contenedor = document.getElementById('lista-elaboradas');
-  if (!elaboradas.length) {
-    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div class="empty-msg">No hay cartas elaboradas pendientes.</div></div>';
-    return;
-  }
-  contenedor.innerHTML = elaboradas.map(a => `
-    <div class="pendiente-item">
-      <div class="pendiente-info">
-        <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="fecha">✏️ Elaborada ${diasDesde(a.fecha_elaborada)} · ${fmtFecha(a.fecha_elaborada)}</div>
-      </div>
-      <span class="badge badge-elaborada">Elaborada</span>
-    </div>
-  `).join('');
-}
-
-// ──────────────────────────────────────────────────
-// MÓDULO 2 – ENTREGAR
-// ──────────────────────────────────────────────────
-async function cargarPendientes() {
-  const contenedor = document.getElementById('lista-pendientes');
-  contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div><div class="empty-msg">Cargando…</div></div>';
-  try {
-    const res = await apiGet('elaboradas');
-    elaboradas = res.data || [];
-    renderPendientes();
-  } catch(e) {
-    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-msg">Error al cargar. Verifica conexión.</div></div>';
-  }
-}
-
-function renderPendientes() {
-  const filtro = (document.getElementById('filtro-entrega')?.value || '').toLowerCase();
-  const contenedor = document.getElementById('lista-pendientes');
-  const lista = filtro
-    ? elaboradas.filter(a =>
-        a.conjunto.toLowerCase().includes(filtro) ||
-        a.apto.toLowerCase().includes(filtro) ||
-        a.direccion.toLowerCase().includes(filtro))
-    : elaboradas;
-
-  if (!elaboradas.length) {
-    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">🎉</div><div class="empty-msg">¡No hay cartas pendientes de entrega!</div></div>';
-    return;
-  }
-  if (!lista.length) {
-    contenedor.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><div class="empty-msg">Sin resultados para ese filtro.</div></div>';
-    return;
-  }
-
-  contenedor.innerHTML = lista.map(a => `
-    <div class="pendiente-item" id="pend-${a.id}">
-      <div class="pendiente-info">
-        <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="fecha">✏️ Elaborada ${diasDesde(a.fecha_elaborada)} · ${fmtFecha(a.fecha_elaborada)}</div>
-      </div>
-      <div class="pendiente-btns">
-        <button class="btn btn-verde btn-sm" onclick="marcarEntregada(${a.id},'${a.conjunto}','${fmt(a).replace(/'/g,"\\'")}')">
-          📬 Entregada
-        </button>
-        <button class="btn btn-danger btn-sm" onclick="deshacerElaborada(${a.id},'${a.conjunto}')">
-          ↩️ Deshacer
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-async function marcarEntregada(id, conjunto, desc) {
-  abrirModal(
-    'Confirmar entrega',
-    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada en el apartamento?`,
-    '📬 Confirmar entrega',
-    async () => {
-      cerrarModal();
-      mostrarLoading('Registrando entrega…');
-      try {
-        const res = await apiPost({ action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPendientes();
-          showToast('📬 Carta marcada como entregada', 'verde');
-        } else {
-          showToast('Error: ' + (res.error || 'desconocido'), 'error');
-        }
-      } catch(e) {
-        showToast('Error de conexión', 'error');
-      }
-      ocultarLoading();
-    }
-  );
-}
-
-async function deshacerElaborada(id, conjunto) {
-  abrirModal(
-    'Deshacer elaboración',
-    `¿Quieres devolver el apartamento de <strong>${conjunto}</strong> al estado disponible? Se borrarán las fechas registradas.`,
-    '↩️ Deshacer',
-    async () => {
-      cerrarModal();
-      mostrarLoading('Deshaciendo…');
-      try {
-        const res = await apiPost({ action: 'deshacer', ids: [id] });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPendientes();
-          showToast('↩️ Carta devuelta a disponible');
-        } else {
-          showToast('Error: ' + (res.error || 'desconocido'), 'error');
-        }
-      } catch(e) {
-        showToast('Error de conexión', 'error');
-      }
-      ocultarLoading();
-    }
-  );
-}
-
-// ──────────────────────────────────────────────────
-// MÓDULO 3 – ESTADÍSTICAS
-// ──────────────────────────────────────────────────
-async function cargarEstadisticas() {
-  mostrarLoading('Cargando estadísticas…');
-  try {
-    const res = await apiGet('estadisticas');
-    estadisticas = res;
-    renderEstadisticas();
-  } catch(e) {
-    showToast('Error al cargar estadísticas', 'error');
-  }
-  ocultarLoading();
-}
-
-function renderEstadisticas() {
-  if (!estadisticas) return;
-  const r = estadisticas.resumen;
-  const conj = estadisticas.por_conjunto;
-  const acts = estadisticas.ultimas_actividades || [];
-
-  // Cajas
-  document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-num">${r.total.toLocaleString()}</div>
-      <div class="stat-label">Apartamentos</div>
-    </div>
-    <div class="stat-card naranja">
-      <div class="stat-num">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
-      <div class="stat-label">Cartas hechas</div>
-    </div>
-    <div class="stat-card verde">
-      <div class="stat-num">${r.entregadas.toLocaleString()}</div>
-      <div class="stat-label">Entregadas</div>
-    </div>
-    <div class="stat-card dorado">
-      <div class="stat-num">${r.pct_entregadas}%</div>
-      <div class="stat-label">% Cubierto</div>
-    </div>
-  `;
-
-  // Progreso global
-  document.getElementById('progreso-global').innerHTML = `
-    <div class="prog-wrap">
-      <div class="prog-label">
-        <span>Cartas entregadas</span>
-        <span style="color:var(--verde)">${r.pct_entregadas}%</span>
-      </div>
-      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
-      <div class="prog-sublabel">${r.entregadas} de ${r.total} apartamentos con carta entregada</div>
-    </div>
-    <div class="prog-wrap">
-      <div class="prog-label">
-        <span>Cartas elaboradas (total)</span>
-        <span style="color:var(--naranja)">${r.pct_hechas}%</span>
-      </div>
-      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_hechas}%;background:linear-gradient(90deg,var(--naranja),#f5a623)"></div></div>
-      <div class="prog-sublabel">${r.elaboradas + r.entregadas} de ${r.total} apartamentos con carta elaborada</div>
-    </div>
-  `;
-
-  // Tabla por conjunto
-  const conjList = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
-  document.getElementById('tabla-conjuntos').innerHTML = `
-    <thead><tr>
-      <th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th>
-    </tr></thead>
-    <tbody>
-    ${conjList.map(([nombre, d]) => {
-      const pct = ((d.entregadas / d.total) * 100).toFixed(0);
-      return `<tr>
-        <td><strong>${nombre}</strong></td>
-        <td>${d.total}</td>
-        <td style="color:var(--naranja);font-weight:700">${d.elaboradas}</td>
-        <td style="color:var(--verde);font-weight:700">${d.entregadas}</td>
-        <td>
-          <div class="mini-bar">
-            <div class="bar"><div class="fill" style="width:${pct}%"></div></div>
-            <div class="pct">${pct}%</div>
-          </div>
-        </td>
-      </tr>`;
-    }).join('')}
-    </tbody>
-  `;
-
-  // Actividades
-  const actDiv = document.getElementById('lista-actividades');
-  if (!acts.length) {
-    actDiv.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-msg">Sin actividad registrada aún.</div></div>';
-    return;
-  }
-  actDiv.innerHTML = acts.map(act => `
-    <div class="actividad-item ${act.tipo}">
-      <div class="act-icon">${act.tipo === 'elaborada' ? '✏️' : '📬'}</div>
-      <div class="act-info">
-        <div class="nombre">${act.apto.conjunto} – ${fmt(act.apto)}</div>
-        <div class="cuando">${act.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtFecha(act.fecha)} (${diasDesde(act.fecha)})</div>
-      </div>
-      <span class="badge ${act.tipo === 'elaborada' ? 'badge-elaborada' : 'badge-entregada'}">
-        ${act.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'}
-      </span>
-    </div>
-  `).join('');
-}
-
-// ──────────────────────────────────────────────────
-// CONECTIVIDAD
-// ──────────────────────────────────────────────────
+// ─── ONLINE STATUS ───────────────────────────────────────
+const setOnline = ok => {
+  document.getElementById('sdot').className = 'status-dot' + (ok ? '' : ' off');
+};
 window.addEventListener('online',  () => setOnline(true));
 window.addEventListener('offline', () => setOnline(false));
 setOnline(navigator.onLine);
 
-// ──────────────────────────────────────────────────
-// SERVICE WORKER
-// ──────────────────────────────────────────────────
+// ─── BANNER ──────────────────────────────────────────────
+const showBanner = msg => {
+  document.getElementById('banner-txt').textContent = msg;
+  document.getElementById('banner').classList.add('show');
+};
+const hideBanner = () => document.getElementById('banner').classList.remove('show');
+
+// ─── FETCH GET (con parámetros en query string) ──────────
+const apiGet = async params => {
+  const qs  = new URLSearchParams(params).toString();
+  const res = await fetch(`${API}?${qs}`, { redirect: 'follow' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+};
+
+// ─── TABS ─────────────────────────────────────────────────
+const goTab = (tab, btn) => {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('pg-' + tab).classList.add('on');
+  btn.classList.add('active');
+  if (tab === 'elaborar')    cargarElab();
+  if (tab === 'entregar')    cargarPend();
+  if (tab === 'stats')       cargarStats();
+};
+
+// ═══════════════════════════════════════════════
+// MÓDULO 1 – ELABORAR
+// ═══════════════════════════════════════════════
+async function generar() {
+  const n = Math.min(12, Math.max(1, parseInt(document.getElementById('n-cartas').value) || 6));
+  showOv('Consultando disponibles…');
+  try {
+    const res = await apiGet({ action: 'disponibles' });
+    setOnline(true); hideBanner();
+
+    // Agrupar por conjunto
+    const map = {};
+    (res.data || []).forEach(a => {
+      if (!map[a.conjunto]) map[a.conjunto] = [];
+      map[a.conjunto].push(a);
+    });
+    const conjs = Object.keys(map);
+    if (!conjs.length) { toast('No hay apartamentos disponibles', 'err'); hideOv(); return; }
+
+    const max   = Math.min(n, conjs.length);
+    const picks = conjs.sort(() => Math.random() - .5).slice(0, max);
+    selActual   = picks.map(c => { const l = map[c]; return l[Math.floor(Math.random() * l.length)]; });
+
+    renderSel();
+    const bl = document.getElementById('bloque-sel');
+    bl.style.display = 'block';
+    setTimeout(() => bl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  } catch(e) {
+    setOnline(false);
+    showBanner('No se pudo conectar. Verifica tu conexión a internet.');
+    toast('Error de conexión', 'err');
+  }
+  hideOv();
+}
+
+const renderSel = () => {
+  document.getElementById('lista-sel').innerHTML = selActual.map((a, i) => `
+    <div class="apto-item">
+      <div class="apto-num">${i+1}</div>
+      <div class="apto-info">
+        <div class="conj">${a.conjunto}</div>
+        <div class="dir">📍 ${a.direccion}</div>
+        <div class="det">${fmt(a)}</div>
+      </div>
+      <span class="badge b-gris">Por elaborar</span>
+    </div>`).join('');
+};
+
+function confirmar() {
+  if (!selActual.length) return;
+  const ul = selActual.map(a => `<li style="margin:4px 0">${a.conjunto} – ${fmt(a)}</li>`).join('');
+  openModal(
+    'Confirmar elaboración',
+    `¿Confirmas que vas a elaborar estas ${selActual.length} carta(s)?<ul style="margin:10px 0 0 18px;font-size:.83rem;color:#555">${ul}</ul>`,
+    '✅ Confirmar',
+    async () => {
+      closeModal();
+      showOv('Guardando en Google Sheets…');
+      try {
+        const ids   = selActual.map(a => a.id).join(',');
+        const fecha = new Date().toISOString();
+        const res   = await apiGet({ action: 'marcar_elaborada', ids, fecha });
+        if (res.ok) {
+          toast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'ok');
+          selActual = [];
+          document.getElementById('bloque-sel').style.display = 'none';
+          cargarElab();
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) {
+        toast('Error de conexión', 'err');
+      }
+      hideOv();
+    }
+  );
+}
+
+async function cargarElab() {
+  const c = document.getElementById('lista-elab');
+  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
+  try {
+    const res = await apiGet({ action: 'elaboradas' });
+    elaboradas = res.data || [];
+    renderElab();
+  } catch(e) {
+    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar. Verifica conexión.</div></div>';
+  }
+}
+
+const renderElab = () => {
+  const c = document.getElementById('lista-elab');
+  if (!elaboradas.length) {
+    c.innerHTML = '<div class="empty"><div class="ei">📭</div><div class="et">No hay cartas elaboradas pendientes.</div></div>';
+    return;
+  }
+  c.innerHTML = elaboradas.map(a => `
+    <div class="apto-item" style="background:white;border-color:var(--naranja-pale)">
+      <div class="apto-info">
+        <div class="conj">${a.conjunto} – ${fmt(a)}</div>
+        <div class="dir">📍 ${a.direccion}</div>
+        <div class="det">✏️ ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
+      </div>
+      <span class="badge b-naranja">Elaborada</span>
+    </div>`).join('');
+};
+
+// ═══════════════════════════════════════════════
+// MÓDULO 2 – ENTREGAR
+// ═══════════════════════════════════════════════
+async function cargarPend() {
+  const c = document.getElementById('lista-pend');
+  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
+  try {
+    const res = await apiGet({ action: 'elaboradas' });
+    elaboradas = res.data || [];
+    renderPend();
+  } catch(e) {
+    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar.</div></div>';
+  }
+}
+
+function renderPend() {
+  const q = (document.getElementById('filtro')?.value || '').toLowerCase();
+  const c = document.getElementById('lista-pend');
+  const lista = q
+    ? elaboradas.filter(a =>
+        a.conjunto.toLowerCase().includes(q) ||
+        String(a.apto).toLowerCase().includes(q) ||
+        a.direccion.toLowerCase().includes(q))
+    : elaboradas;
+
+  if (!elaboradas.length) {
+    c.innerHTML = '<div class="empty"><div class="ei">🎉</div><div class="et">¡No hay cartas pendientes!</div></div>';
+    return;
+  }
+  if (!lista.length) {
+    c.innerHTML = '<div class="empty"><div class="ei">🔍</div><div class="et">Sin resultados para ese filtro.</div></div>';
+    return;
+  }
+  c.innerHTML = lista.map(a => `
+    <div class="pend-item">
+      <div class="pend-main">
+        <div class="pend-info">
+          <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
+          <div class="dir">📍 ${a.direccion}</div>
+          <div class="fecha">✏️ Elaborada ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
+        </div>
+        <span class="badge b-naranja">Elaborada</span>
+      </div>
+      <div class="pend-actions">
+        <button class="btn btn-verde btn-sm"
+          onclick="entregar(${a.id},'${a.conjunto.replace(/'/g,"\\'")}','${fmt(a).replace(/'/g,"\\'")}')">
+          📬 Entregada
+        </button>
+        <button class="btn btn-danger btn-sm"
+          onclick="deshacerElab(${a.id},'${a.conjunto.replace(/'/g,"\\'")}')">
+          ↩️ Deshacer
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+function entregar(id, conjunto, desc) {
+  openModal(
+    'Confirmar entrega',
+    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada en el apartamento?`,
+    '📬 Confirmar entrega',
+    async () => {
+      closeModal();
+      showOv('Registrando entrega…');
+      try {
+        const res = await apiGet({ action: 'marcar_entregada', ids: String(id), fecha: new Date().toISOString() });
+        if (res.ok) {
+          elaboradas = elaboradas.filter(a => a.id !== id);
+          renderPend();
+          toast('📬 Carta marcada como entregada', 'ok');
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) { toast('Error de conexión', 'err'); }
+      hideOv();
+    }
+  );
+}
+
+function deshacerElab(id, conjunto) {
+  openModal(
+    'Deshacer elaboración',
+    `¿Devolver el apartamento de <strong>${conjunto}</strong> al estado disponible? Se borrarán las fechas.`,
+    '↩️ Deshacer',
+    async () => {
+      closeModal();
+      showOv('Deshaciendo…');
+      try {
+        const res = await apiGet({ action: 'deshacer', ids: String(id) });
+        if (res.ok) {
+          elaboradas = elaboradas.filter(a => a.id !== id);
+          renderPend();
+          toast('↩️ Carta devuelta a disponible');
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) { toast('Error de conexión', 'err'); }
+      hideOv();
+    }
+  );
+}
+
+// ═══════════════════════════════════════════════
+// MÓDULO 3 – ESTADÍSTICAS
+// ═══════════════════════════════════════════════
+async function cargarStats() {
+  showOv('Cargando estadísticas…');
+  try {
+    const res = await apiGet({ action: 'estadisticas' });
+    renderStats(res);
+  } catch(e) { toast('Error al cargar estadísticas', 'err'); }
+  hideOv();
+}
+
+function renderStats(d) {
+  const r    = d.resumen;
+  const conj = d.por_conjunto;
+  const acts = d.ultimas_actividades || [];
+
+  document.getElementById('s-grid').innerHTML = `
+    <div class="stat">
+      <div class="stat-n">${r.total.toLocaleString()}</div>
+      <div class="stat-l">Aptos en territorio</div>
+    </div>
+    <div class="stat s-naranja">
+      <div class="stat-n">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
+      <div class="stat-l">Cartas hechas</div>
+    </div>
+    <div class="stat s-verde">
+      <div class="stat-n">${r.entregadas.toLocaleString()}</div>
+      <div class="stat-l">Entregadas</div>
+    </div>
+    <div class="stat s-dorado">
+      <div class="stat-n">${r.pct_entregadas}%</div>
+      <div class="stat-l">% Cubierto</div>
+    </div>`;
+
+  document.getElementById('s-progreso').innerHTML = `
+    <div class="prog">
+      <div class="prog-hd"><span>Cartas entregadas</span><span style="color:var(--verde)">${r.pct_entregadas}%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
+      <div class="prog-sub">${r.entregadas} de ${r.total} apartamentos</div>
+    </div>
+    <div class="prog">
+      <div class="prog-hd"><span>Total elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
+      <div class="prog-bar"><div class="prog-fill orange" style="width:${r.pct_hechas}%"></div></div>
+      <div class="prog-sub">${r.elaboradas + r.entregadas} de ${r.total} apartamentos</div>
+    </div>`;
+
+  const rows = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
+  document.getElementById('s-tabla').innerHTML = `
+    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th></tr></thead>
+    <tbody>${rows.map(([n, v]) => {
+      const p = ((v.entregadas / v.total) * 100).toFixed(0);
+      return `<tr>
+        <td><strong>${n}</strong></td><td>${v.total}</td>
+        <td style="color:var(--naranja);font-weight:700">${v.elaboradas}</td>
+        <td style="color:var(--verde);font-weight:700">${v.entregadas}</td>
+        <td><div class="mini-bar"><div class="b"><div class="f" style="width:${p}%"></div></div><div class="p">${p}%</div></div></td>
+      </tr>`;
+    }).join('')}</tbody>`;
+
+  const aDiv = document.getElementById('s-acts');
+  if (!acts.length) {
+    aDiv.innerHTML = '<div class="empty"><div class="ei">📋</div><div class="et">Sin actividad aún.</div></div>';
+    return;
+  }
+  aDiv.innerHTML = acts.map(a => `
+    <div class="act-item ${a.tipo}">
+      <div class="act-ico">${a.tipo === 'elaborada' ? '✏️' : '📬'}</div>
+      <div class="act-txt">
+        <div class="n">${a.apto.conjunto} – ${fmt(a.apto)}</div>
+        <div class="f">${a.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtF(a.fecha)} (${desde(a.fecha)})</div>
+      </div>
+      <span class="badge ${a.tipo === 'elaborada' ? 'b-naranja' : 'b-verde'}">${a.tipo === 'elaborada' ? 'Elab.' : 'Entr.'}</span>
+    </div>`).join('');
+}
+
+// ─── SERVICE WORKER ───────────────────────────────────────
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
-// ──────────────────────────────────────────────────
-// INICIO
-// ──────────────────────────────────────────────────
-cargarElaboradas();
+// ─── INIT ─────────────────────────────────────────────────
+cargarElab();
 </script>
 </body>
 </html>
