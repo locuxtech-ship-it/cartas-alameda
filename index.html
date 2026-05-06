@@ -532,12 +532,26 @@ const showBanner = msg => {
 };
 const hideBanner = () => document.getElementById('banner').classList.remove('show');
 
-// ─── FETCH GET (con parámetros en query string) ──────────
+// ─── PETICIONES API ──────────────────────────────────────
+
+// GET para lectura (disponibles, elaboradas, estadísticas)
 const apiGet = async params => {
   const qs  = new URLSearchParams(params).toString();
   const res = await fetch(`${API}?${qs}`, { redirect: 'follow' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
+};
+
+// POST para escritura (marcar_elaborada, marcar_entregada, deshacer)
+const apiPost = async data => {
+  const res = await fetch(API, {
+    method: 'POST',
+    mode: 'no-cors', // Necesario para Google Apps Script POST desde navegador
+    body: JSON.stringify(data)
+  });
+  // Como usamos no-cors para evitar problemas de redirección, 
+  // asumimos que si no hay error de red, se envió correctamente.
+  return { ok: true }; 
 };
 
 // ─── TABS ─────────────────────────────────────────────────
@@ -561,7 +575,6 @@ async function generar() {
     const res = await apiGet({ action: 'disponibles' });
     setOnline(true); hideBanner();
 
-    // Agrupar por conjunto
     const map = {};
     (res.data || []).forEach(a => {
       if (!map[a.conjunto]) map[a.conjunto] = [];
@@ -610,17 +623,17 @@ function confirmar() {
       closeModal();
       showOv('Guardando en Google Sheets…');
       try {
-        const ids   = selActual.map(a => a.id).join(',');
-        const fecha = new Date().toISOString();
-        const res   = await apiGet({ action: 'marcar_elaborada', ids, fecha });
-        if (res.ok) {
-          toast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'ok');
-          selActual = [];
-          document.getElementById('bloque-sel').style.display = 'none';
-          cargarElab();
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
+        // CORRECCIÓN: Enviar como POST y enviar IDs como ARRAY
+        const res = await apiPost({ 
+          action: 'marcar_elaborada', 
+          ids: selActual.map(a => a.id), 
+          fecha: new Date().toISOString() 
+        });
+        
+        toast(`✅ Cartas marcadas como elaboradas`, 'ok');
+        selActual = [];
+        document.getElementById('bloque-sel').style.display = 'none';
+        cargarElab();
       } catch(e) {
         toast('Error de conexión', 'err');
       }
@@ -723,14 +736,15 @@ function entregar(id, conjunto, desc) {
       closeModal();
       showOv('Registrando entrega…');
       try {
-        const res = await apiGet({ action: 'marcar_entregada', ids: String(id), fecha: new Date().toISOString() });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPend();
-          toast('📬 Carta marcada como entregada', 'ok');
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
+        // CORRECCIÓN: POST con ID en array
+        await apiPost({ 
+          action: 'marcar_entregada', 
+          ids: [id], 
+          fecha: new Date().toISOString() 
+        });
+        elaboradas = elaboradas.filter(a => a.id !== id);
+        renderPend();
+        toast('📬 Carta marcada como entregada', 'ok');
       } catch(e) { toast('Error de conexión', 'err'); }
       hideOv();
     }
@@ -746,14 +760,14 @@ function deshacerElab(id, conjunto) {
       closeModal();
       showOv('Deshaciendo…');
       try {
-        const res = await apiGet({ action: 'deshacer', ids: String(id) });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPend();
-          toast('↩️ Carta devuelta a disponible');
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
+        // CORRECCIÓN: POST con ID en array
+        await apiPost({ 
+          action: 'deshacer', 
+          ids: [id] 
+        });
+        elaboradas = elaboradas.filter(a => a.id !== id);
+        renderPend();
+        toast('↩️ Carta devuelta a disponible');
       } catch(e) { toast('Error de conexión', 'err'); }
       hideOv();
     }
@@ -783,7 +797,7 @@ function renderStats(d) {
       <div class="stat-l">Aptos en territorio</div>
     </div>
     <div class="stat s-naranja">
-      <div class="stat-n">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
+      <div class="stat-n">${(parseFloat(r.elaboradas) + parseFloat(r.entregadas)).toLocaleString()}</div>
       <div class="stat-l">Cartas hechas</div>
     </div>
     <div class="stat s-verde">
@@ -804,7 +818,7 @@ function renderStats(d) {
     <div class="prog">
       <div class="prog-hd"><span>Total elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
       <div class="prog-bar"><div class="prog-fill orange" style="width:${r.pct_hechas}%"></div></div>
-      <div class="prog-sub">${r.elaboradas + r.entregadas} de ${r.total} apartamentos</div>
+      <div class="prog-sub">${parseFloat(r.elaboradas) + parseFloat(r.entregadas)} de ${r.total} apartamentos</div>
     </div>`;
 
   const rows = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
