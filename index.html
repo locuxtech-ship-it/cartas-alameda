@@ -1,400 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2557">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AR Cartas">
+<title>Alameda del Río</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul-noche:  #0f2557; --azul-real: #1a3a8f; --azul-medio: #2d5bbf; --azul-claro: #4a7ad4;
+  --azul-pale: #d6e4ff; --azul-bg: #f0f4ff; --dorado: #f0a500; --dorado-pale: #fff3cc;
+  --blanco: #ffffff; --gris-1: #f5f7fc; --gris-2: #eaecf4; --gris-3: #c4cade;
+  --texto: #0d1b3e; --texto-2: #4a5578; --texto-3: #8a95b8; --verde: #1a7a4a;
+  --verde-pale: #d4f5e5; --naranja: #e05d20; --naranja-pale:#fde8da; --rojo: #c0392b;
+  --radio: 12px; --radio-lg: 16px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(--texto); min-height: 100dvh; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+/* HEADER */
+.header { background: linear-gradient(135deg, var(--azul-noche) 0%, var(--azul-real) 100%); color: white; display: flex; align-items: center; gap: 12px; padding: 12px 16px; padding-top: calc(12px + env(safe-area-inset-top)); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(15,37,87,.4); }
+.logo-box { width: 38px; height: 38px; flex-shrink: 0; background: rgba(255,255,255,.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.logo-sobre { width: 24px; height: 17px; background: white; border-radius: 2px; position: relative; }
+.logo-solapa { position: absolute; top: 0; left: 0; right: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 9px solid var(--azul-claro); }
+.logo-sello { position: absolute; bottom: 1px; right: 1px; width: 9px; height: 9px; border-radius: 50%; background: var(--dorado); font-size: 5px; font-weight: 700; color: var(--azul-noche); display: flex; align-items: center; justify-content: center; }
+.header-title { flex: 1; }
+.header-title strong { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; display: block; }
+.header-title span { font-size: .7rem; opacity: .6; text-transform: uppercase; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
+.status-dot.off { background: #fb923c; }
+/* TABS */
+.tabs { background: #0b1d47; display: flex; position: sticky; top: calc(62px + env(safe-area-inset-top)); z-index: 49; }
+.tab { flex: 1; border: none; background: none; color: rgba(255,255,255,.45); font-weight: 600; font-size: .68rem; padding: 10px 4px 8px; display: flex; flex-direction: column; align-items: center; border-bottom: 3px solid transparent; }
+.tab.active { color: white; border-bottom-color: var(--dorado); }
+/* CONTENIDO */
+.page { display: none; padding: 16px 14px 90px; max-width: 600px; margin: 0 auto; }
+.page.on { display: block; }
+.card { background: white; border-radius: var(--radio-lg); padding: 18px 16px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(15,37,87,.08); border: 1px solid var(--gris-2); }
+.card-h { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--azul-noche); margin-bottom: 3px; }
+.card-sub { font-size: .8rem; color: var(--texto-3); margin-bottom: 16px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: .72rem; font-weight: 600; color: var(--texto-2); text-transform: uppercase; margin-bottom: 5px; }
+.field input { width: 100%; padding: 12px 14px; border: 2px solid var(--gris-2); border-radius: 9px; font-size: 1rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-primary { background: var(--azul-medio); color: white; }
+.btn-ghost { background: var(--azul-bg); color: var(--azul-real); }
+.btn-dorado { background: var(--dorado); color: var(--azul-noche); }
+.btn-verde { background: var(--verde); color: white; }
+.btn-danger { background: #fee2e2; color: var(--rojo); }
+.btn-full { width: 100%; }
+.btn-sm { padding: 9px 14px; font-size: .8rem; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.badge { display: inline-flex; padding: 3px 9px; border-radius: 99px; font-size: .68rem; font-weight: 700; }
+.b-naranja { background: var(--naranja-pale); color: var(--naranja); }
+.apto-list { display: flex; flex-direction: column; gap: 9px; }
+.apto-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radio); background: var(--gris-1); border: 1.5px solid var(--azul-pale); }
+.apto-num { width: 34px; height: 34px; border-radius: 50%; background: var(--azul-medio); color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.apto-info { flex: 1; min-width: 0; }
+.apto-info .conj { font-weight: 700; }
+.apto-info .dir { font-size: .77rem; color: var(--texto-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-wrap { position: relative; margin-bottom: 12px; }
+.search-input { width: 100%; padding: 11px 14px 11px 38px; border: 2px solid var(--gris-2); border-radius: 9px; }
+.pend-item { padding: 13px 14px; border-radius: var(--radio); border: 1.5px solid var(--gris-2); background: white; margin-bottom: 10px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.stat { background: white; border-radius: var(--radio-lg); padding: 16px 14px; text-align: center; border-top: 4px solid var(--azul-medio); }
+.stat-n { font-family: 'Barlow Condensed', sans-serif; font-size: 1.9rem; font-weight: 700; }
+.stat-l { font-size: .68rem; color: var(--texto-3); text-transform: uppercase; }
+.prog-bar { height: 9px; background: var(--gris-2); border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--azul-medio); transition: width 0.8s; }
+.conj-table { width: 100%; border-collapse: collapse; font-size: .83rem; margin-top: 10px; }
+.conj-table th { text-align: left; font-size: .67rem; color: var(--texto-3); padding: 8px; }
+.conj-table td { padding: 8px; border-bottom: 1px solid var(--gris-2); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.7); z-index: 200; align-items: center; justify-content: center; flex-direction: column; color: white; }
+.overlay.on { display: flex; }
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.5); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-bg.on { display: flex; }
+.modal-box { background: white; width: 100%; max-width: 540px; padding: 24px; border-radius: 20px 20px 0 0; max-height: 85vh; overflow-y: auto; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 50px; transition: 0.3s; z-index: 1000; }
+.toast.on { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="ov" class="overlay"><div style="width:40px;height:40px;border:4px solid #fff3;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite"></div><div id="ov-msg" style="margin-top:15px">Cargando...</div></div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<div id="modal" class="modal-bg">
+  <div class="modal-box">
+    <h3 id="m-titulo"></h3>
+    <div id="m-desc"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" id="m-ok">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<header class="header">
+  <div class="logo-box"><div class="logo-sobre"><div class="logo-solapa"></div><div class="logo-sello">AR</div></div></div>
+  <div class="header-title"><strong>Alameda del Río</strong><span>Gestión de Cartas</span></div>
+  <div id="sdot" class="status-dot"></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" onclick="goTab('elaborar',this)">✉️ Elaborar</button>
+  <button class="tab" onclick="goTab('entregar',this)">📬 Entregar</button>
+  <button class="tab" onclick="goTab('stats',this)">📊 Estadisticas</button>
+</nav>
+
+<!-- ELABORAR -->
+<div id="pg-elaborar" class="page on">
+  <div class="card">
+    <div class="card-h">Generar cartas</div>
+    <div class="field"><label>Cantidad (Aleatorio)</label><input type="number" id="n-cartas" value="1"></div>
+    <div style="display:flex; gap:10px">
+        <button class="btn btn-primary btn-full" onclick="generarAleatorio()">🎲 Aleatorio</button>
+        <button class="btn btn-ghost btn-full" onclick="abrirManual()">🔍 Manual</button>
+    </div>
+  </div>
+  <div id="bloque-sel" style="display:none">
+    <div class="card">
+      <div class="card-h" id="sel-tipo-h">Selección actual</div>
+      <div class="apto-list" id="lista-sel"></div>
+      <div class="btn-row"><button class="btn btn-dorado btn-full" onclick="confirmarElab()">✅ Confirmar elaboración</button></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-h">Por entregar hoy</div><div id="lista-elab"></div></div>
+</div>
+
+<!-- ENTREGAR -->
+<div id="pg-entregar" class="page">
+  <div class="card">
+    <div class="card-h">Listado de entrega</div>
+    <div class="search-wrap"><input type="search" class="search-input" id="filtro" placeholder="Buscar..." oninput="renderPend()"></div>
+    <div id="lista-pend"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="pg-stats" class="page">
+  <div id="s-grid" class="stats-grid"></div>
+  <div class="card">
+    <div class="card-h">Progreso General</div>
+    <div id="s-progreso"></div>
+    <div class="card-h" style="margin-top:20px">Avance por Conjunto</div>
+    <table id="s-tabla" class="conj-table"></table>
+  </div>
+</div>
+
 <script>
-// ─── CONFIG ────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU9QMcABOuWJCpKwoXbDyVv58e_LsC4SqKt6JnIspJ/exec';
 
-// ─── ESTADO ─────────────────────────────────────────────
-let elaboradas  = [];
-let selActual   = [];
-let modalCb     = null;
+let elaboradas = [];
+let disponiblesRaw = [];
+let selActual = [];
 
-// ─── UTILIDADES ─────────────────────────────────────────
-const fmt = a => {
-  let s = `Apto ${a.apto}`;
-  if (a.torre)    s += ` · Torre ${a.torre}`;
-  if (a.interior) s += ` · Int ${a.interior}`;
-  return s;
-};
-
-const fmtF = iso => {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})
-    + ' ' + d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
-};
-
-const desde = iso => {
-  if (!iso) return '';
-  const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
-  return d === 0 ? 'hoy' : d === 1 ? 'ayer' : `hace ${d} días`;
-};
-
-// ─── LOADING ─────────────────────────────────────────────
-const showOv  = msg => { document.getElementById('ov-msg').textContent = msg; document.getElementById('ov').classList.add('on'); };
-const hideOv  = ()  => document.getElementById('ov').classList.remove('on');
-
-// ─── TOAST ───────────────────────────────────────────────
-let _tid;
-const toast = (msg, cls='') => {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast on ' + cls;
-  clearTimeout(_tid); _tid = setTimeout(() => t.classList.remove('on'), 3000);
-};
-
-// ─── MODAL ───────────────────────────────────────────────
-const openModal = (titulo, desc, label, cb) => {
-  document.getElementById('m-titulo').textContent = titulo;
-  document.getElementById('m-desc').innerHTML = desc;
-  document.getElementById('m-ok').textContent = label;
-  modalCb = cb;
-  document.getElementById('modal').classList.add('on');
-};
-const closeModal = () => {
-  document.getElementById('modal').classList.remove('on');
-  modalCb = null;
-};
-document.getElementById('m-ok').onclick = () => { if (modalCb) modalCb(); };
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal')) closeModal();
-});
-
-// ─── ONLINE STATUS ───────────────────────────────────────
-const setOnline = ok => {
-  document.getElementById('sdot').className = 'status-dot' + (ok ? '' : ' off');
-};
-window.addEventListener('online',  () => setOnline(true));
-window.addEventListener('offline', () => setOnline(false));
-setOnline(navigator.onLine);
-
-// ─── BANNER ──────────────────────────────────────────────
-const showBanner = msg => {
-  document.getElementById('banner-txt').textContent = msg;
-  document.getElementById('banner').classList.add('show');
-};
-const hideBanner = () => document.getElementById('banner').classList.remove('show');
-
-// ─── PETICIONES API ──────────────────────────────────────
-
-// GET para lectura (disponibles, elaboradas, estadísticas)
-const apiGet = async params => {
-  const qs  = new URLSearchParams(params).toString();
-  const res = await fetch(`${API}?${qs}`, { redirect: 'follow' });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-};
-
-// POST para escritura (marcar_elaborada, marcar_entregada, deshacer)
-const apiPost = async data => {
-  const res = await fetch(API, {
-    method: 'POST',
-    mode: 'no-cors', // Necesario para Google Apps Script POST desde navegador
-    body: JSON.stringify(data)
-  });
-  // Como usamos no-cors para evitar problemas de redirección, 
-  // asumimos que si no hay error de red, se envió correctamente.
-  return { ok: true }; 
-};
-
-// ─── TABS ─────────────────────────────────────────────────
-const goTab = (tab, btn) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('pg-' + tab).classList.add('on');
-  btn.classList.add('active');
-  if (tab === 'elaborar')    cargarElab();
-  if (tab === 'entregar')    cargarPend();
-  if (tab === 'stats')       cargarStats();
-};
-
-// ═══════════════════════════════════════════════
-// MÓDULO 1 – ELABORAR
-// ═══════════════════════════════════════════════
-async function generar() {
-  const n = Math.min(12, Math.max(1, parseInt(document.getElementById('n-cartas').value) || 6));
-  showOv('Consultando disponibles…');
-  try {
-    const res = await apiGet({ action: 'disponibles' });
-    setOnline(true); hideBanner();
-
-    const map = {};
-    (res.data || []).forEach(a => {
-      if (!map[a.conjunto]) map[a.conjunto] = [];
-      map[a.conjunto].push(a);
-    });
-    const conjs = Object.keys(map);
-    if (!conjs.length) { toast('No hay apartamentos disponibles', 'err'); hideOv(); return; }
-
-    const max   = Math.min(n, conjs.length);
-    const picks = conjs.sort(() => Math.random() - .5).slice(0, max);
-    selActual   = picks.map(c => { const l = map[c]; return l[Math.floor(Math.random() * l.length)]; });
-
-    renderSel();
-    const bl = document.getElementById('bloque-sel');
-    bl.style.display = 'block';
-    setTimeout(() => bl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
-  } catch(e) {
-    setOnline(false);
-    showBanner('No se pudo conectar. Verifica tu conexión a internet.');
-    toast('Error de conexión', 'err');
-  }
-  hideOv();
+// --- API ---
+async function apiReq(params, method = 'GET', body = null) {
+    const url = method === 'GET' ? `${API}?${new URLSearchParams(params)}` : API;
+    const options = { method, redirect: 'follow' };
+    if (body) {
+        options.body = JSON.stringify(body);
+        // Usamos text/plain para evitar el preflight OPTIONS de CORS que Apps Script no maneja bien
+        options.headers = { 'Content-Type': 'text/plain' }; 
+    }
+    const res = await fetch(url, options);
+    return res.json();
 }
 
-const renderSel = () => {
-  document.getElementById('lista-sel').innerHTML = selActual.map((a, i) => `
-    <div class="apto-item">
-      <div class="apto-num">${i+1}</div>
-      <div class="apto-info">
-        <div class="conj">${a.conjunto}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="det">${fmt(a)}</div>
-      </div>
-      <span class="badge b-gris">Por elaborar</span>
-    </div>`).join('');
+// --- UTILS ---
+const showOv = m => { document.getElementById('ov-msg').textContent = m; document.getElementById('ov').classList.add('on'); };
+const hideOv = () => document.getElementById('ov').classList.remove('on');
+const toast = m => { const t = document.getElementById('toast'); t.textContent = m; t.className = 'toast on'; setTimeout(()=>t.classList.remove('on'), 3000); };
+const openModal = (t, d, cb) => { 
+    document.getElementById('m-titulo').textContent = t; 
+    document.getElementById('m-desc').innerHTML = d; 
+    document.getElementById('m-ok').onclick = cb;
+    document.getElementById('modal').classList.add('on'); 
 };
+const closeModal = () => document.getElementById('modal').classList.remove('on');
+const fmt = a => `Apto ${a.apto}${a.torre ? ' · T'+a.torre : ''}`;
 
-function confirmar() {
-  if (!selActual.length) return;
-  const ul = selActual.map(a => `<li style="margin:4px 0">${a.conjunto} – ${fmt(a)}</li>`).join('');
-  openModal(
-    'Confirmar elaboración',
-    `¿Confirmas que vas a elaborar estas ${selActual.length} carta(s)?<ul style="margin:10px 0 0 18px;font-size:.83rem;color:#555">${ul}</ul>`,
-    '✅ Confirmar',
-    async () => {
-      closeModal();
-      showOv('Guardando en Google Sheets…');
-      try {
-        // CORRECCIÓN: Enviar como POST y enviar IDs como ARRAY
-        const res = await apiPost({ 
-          action: 'marcar_elaborada', 
-          ids: selActual.map(a => a.id), 
-          fecha: new Date().toISOString() 
+// --- ELABORAR ---
+async function generarAleatorio() {
+    showOv('Buscando...');
+    try {
+        const res = await apiReq({ action: 'disponibles' });
+        const data = res.data || [];
+        const n = parseInt(document.getElementById('n-cartas').value) || 6;
+        const picks = data.sort(() => Math.random() - 0.5).slice(0, n);
+        selActual = picks;
+        renderSel("Aleatoria");
+    } catch(e) { toast('Error de conexión'); }
+    hideOv();
+}
+
+async function abrirManual() {
+    showOv('Cargando lista...');
+    try {
+        const res = await apiReq({ action: 'disponibles' });
+        disponiblesRaw = res.data || [];
+        const html = `
+            <input type="text" class="search-input" placeholder="Filtrar..." oninput="filterM(this.value)" style="margin-bottom:15px">
+            <div id="m-list" style="max-height:350px; overflow-y:auto">
+                ${renderMItems(disponiblesRaw)}
+            </div>`;
+        openModal("Selección Manual", html, () => {
+            if(selActual.length) renderSel("Manual");
+            closeModal();
         });
-        
-        toast(`✅ Cartas marcadas como elaboradas`, 'ok');
-        selActual = [];
-        document.getElementById('bloque-sel').style.display = 'none';
-        cargarElab();
-      } catch(e) {
-        toast('Error de conexión', 'err');
-      }
-      hideOv();
-    }
-  );
+    } catch(e) { toast('Error'); }
+    hideOv();
+}
+
+function renderMItems(lista) {
+    return lista.map(a => `
+        <div onclick="toggleM(this, ${a.id})" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:${selActual.some(s=>s.id===a.id)?'#fff3cc':''}">
+            <strong>${a.conjunto}</strong> - ${fmt(a)}
+        </div>`).join('');
+}
+function filterM(v) {
+    const f = disponiblesRaw.filter(a => a.conjunto.toLowerCase().includes(v.toLowerCase()) || String(a.apto).includes(v));
+    document.getElementById('m-list').innerHTML = renderMItems(f);
+}
+function toggleM(el, id) {
+    const idx = selActual.findIndex(s => s.id === id);
+    if(idx > -1) { selActual.splice(idx,1); el.style.background = ''; }
+    else { selActual.push(disponiblesRaw.find(a => a.id === id)); el.style.background = '#fff3cc'; }
+}
+
+function renderSel(t) {
+    document.getElementById('sel-tipo-h').textContent = "Selección " + t;
+    document.getElementById('lista-sel').innerHTML = selActual.map(a => `<div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div>${fmt(a)}</div></div></div>`).join('');
+    document.getElementById('bloque-sel').style.display = 'block';
+}
+
+async function confirmarElab() {
+    showOv('Guardando...');
+    try {
+        const res = await apiReq({}, 'POST', { 
+            action: 'marcar_elaborada', 
+            ids: selActual.map(a => a.id), 
+            fecha: new Date().toISOString() 
+        });
+        if(res.ok) {
+            toast('Guardado con éxito');
+            selActual = [];
+            document.getElementById('bloque-sel').style.display = 'none';
+            cargarElab();
+        } else { toast('Error: ' + res.error); }
+    } catch(e) { toast('Error de conexión'); }
+    hideOv();
 }
 
 async function cargarElab() {
-  const c = document.getElementById('lista-elab');
-  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
-  try {
-    const res = await apiGet({ action: 'elaboradas' });
-    elaboradas = res.data || [];
-    renderElab();
-  } catch(e) {
-    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar. Verifica conexión.</div></div>';
-  }
+    try {
+        const res = await apiReq({ action: 'elaboradas' });
+        elaboradas = res.data || [];
+        document.getElementById('lista-elab').innerHTML = elaboradas.map(a => `
+            <div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div>${fmt(a)}</div></div><span class="badge b-naranja">Elaborada</span></div>
+        `).join('') || '<div style="text-align:center;padding:20px;color:#999">No hay cartas listas</div>';
+    } catch(e) {}
 }
 
-const renderElab = () => {
-  const c = document.getElementById('lista-elab');
-  if (!elaboradas.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">📭</div><div class="et">No hay cartas elaboradas pendientes.</div></div>';
-    return;
-  }
-  c.innerHTML = elaboradas.map(a => `
-    <div class="apto-item" style="background:white;border-color:var(--naranja-pale)">
-      <div class="apto-info">
-        <div class="conj">${a.conjunto} – ${fmt(a)}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="det">✏️ ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
-      </div>
-      <span class="badge b-naranja">Elaborada</span>
-    </div>`).join('');
-};
-
-// ═══════════════════════════════════════════════
-// MÓDULO 2 – ENTREGAR
-// ═══════════════════════════════════════════════
-async function cargarPend() {
-  const c = document.getElementById('lista-pend');
-  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
-  try {
-    const res = await apiGet({ action: 'elaboradas' });
-    elaboradas = res.data || [];
-    renderPend();
-  } catch(e) {
-    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar.</div></div>';
-  }
-}
-
+// --- ENTREGAR ---
 function renderPend() {
-  const q = (document.getElementById('filtro')?.value || '').toLowerCase();
-  const c = document.getElementById('lista-pend');
-  const lista = q
-    ? elaboradas.filter(a =>
-        a.conjunto.toLowerCase().includes(q) ||
-        String(a.apto).toLowerCase().includes(q) ||
-        a.direccion.toLowerCase().includes(q))
-    : elaboradas;
-
-  if (!elaboradas.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">🎉</div><div class="et">¡No hay cartas pendientes!</div></div>';
-    return;
-  }
-  if (!lista.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">🔍</div><div class="et">Sin resultados para ese filtro.</div></div>';
-    return;
-  }
-  c.innerHTML = lista.map(a => `
-    <div class="pend-item">
-      <div class="pend-main">
-        <div class="pend-info">
-          <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
-          <div class="dir">📍 ${a.direccion}</div>
-          <div class="fecha">✏️ Elaborada ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
-        </div>
-        <span class="badge b-naranja">Elaborada</span>
-      </div>
-      <div class="pend-actions">
-        <button class="btn btn-verde btn-sm"
-          onclick="entregar(${a.id},'${a.conjunto.replace(/'/g,"\\'")}','${fmt(a).replace(/'/g,"\\'")}')">
-          📬 Entregada
-        </button>
-        <button class="btn btn-danger btn-sm"
-          onclick="deshacerElab(${a.id},'${a.conjunto.replace(/'/g,"\\'")}')">
-          ↩️ Deshacer
-        </button>
-      </div>
-    </div>`).join('');
+    const q = document.getElementById('filtro').value.toLowerCase();
+    const list = elaboradas.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q));
+    document.getElementById('lista-pend').innerHTML = list.map(a => `
+        <div class="pend-item">
+            <div style="margin-bottom:10px"><strong>${a.conjunto}</strong> - ${fmt(a)}</div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-verde btn-sm btn-full" onclick="marcarEntr(${a.id})">📬 Entregada</button>
+                <button class="btn btn-danger btn-sm" onclick="revertir(${a.id})">↩️</button>
+            </div>
+        </div>`).join('') || '<div style="text-align:center;padding:20px;color:#999">Nada pendiente</div>';
 }
 
-function entregar(id, conjunto, desc) {
-  openModal(
-    'Confirmar entrega',
-    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada en el apartamento?`,
-    '📬 Confirmar entrega',
-    async () => {
-      closeModal();
-      showOv('Registrando entrega…');
-      try {
-        // CORRECCIÓN: POST con ID en array
-        await apiPost({ 
-          action: 'marcar_entregada', 
-          ids: [id], 
-          fecha: new Date().toISOString() 
-        });
-        elaboradas = elaboradas.filter(a => a.id !== id);
-        renderPend();
-        toast('📬 Carta marcada como entregada', 'ok');
-      } catch(e) { toast('Error de conexión', 'err'); }
-      hideOv();
-    }
-  );
+async function marcarEntr(id) {
+    showOv('Procesando...');
+    try {
+        const res = await apiReq({}, 'POST', { action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
+        if(res.ok) { cargarElab().then(renderPend); toast('Entregada'); }
+    } catch(e) {}
+    hideOv();
 }
 
-function deshacerElab(id, conjunto) {
-  openModal(
-    'Deshacer elaboración',
-    `¿Devolver el apartamento de <strong>${conjunto}</strong> al estado disponible? Se borrarán las fechas.`,
-    '↩️ Deshacer',
-    async () => {
-      closeModal();
-      showOv('Deshaciendo…');
-      try {
-        // CORRECCIÓN: POST con ID en array
-        await apiPost({ 
-          action: 'deshacer', 
-          ids: [id] 
-        });
-        elaboradas = elaboradas.filter(a => a.id !== id);
-        renderPend();
-        toast('↩️ Carta devuelta a disponible');
-      } catch(e) { toast('Error de conexión', 'err'); }
-      hideOv();
-    }
-  );
+async function revertir(id) {
+    if(!confirm("¿Devolver a disponible?")) return;
+    showOv('Revirtiendo...');
+    try {
+        const res = await apiReq({}, 'POST', { action: 'deshacer', ids: [id] });
+        if(res.ok) { cargarElab().then(renderPend); toast('Revertido'); }
+    } catch(e) {}
+    hideOv();
 }
 
-// ═══════════════════════════════════════════════
-// MÓDULO 3 – ESTADÍSTICAS
-// ═══════════════════════════════════════════════
+// --- STATS ---
 async function cargarStats() {
-  showOv('Cargando estadísticas…');
-  try {
-    const res = await apiGet({ action: 'estadisticas' });
-    renderStats(res);
-  } catch(e) { toast('Error al cargar estadísticas', 'err'); }
-  hideOv();
+    showOv('Cargando estadísticas...');
+    try {
+        const d = await apiReq({ action: 'estadisticas' });
+        const r = d.resumen;
+        document.getElementById('s-grid').innerHTML = `
+            <div class="stat"><div class="stat-n">${r.total}</div><div class="stat-l">Total</div></div>
+            <div class="stat"><div class="stat-n">${r.entregadas}</div><div class="stat-l">Entregadas</div></div>
+            <div class="stat"><div class="stat-n">${r.elaboradas}</div><div class="stat-l">Pendientes</div></div>
+            <div class="stat"><div class="stat-n">${r.pct_entregadas}%</div><div class="stat-l">Avance</div></div>`;
+        document.getElementById('s-progreso').innerHTML = `<div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>`;
+        
+        const rows = Object.entries(d.por_conjunto).sort((a,b)=>b[1].total - a[1].total);
+        document.getElementById('s-tabla').innerHTML = `<tr><th>Conjunto</th><th>Total</th><th>Entr.</th><th>%</th></tr>` +
+            rows.map(([n,v]) => `<tr><td>${n}</td><td>${v.total}</td><td>${v.entregadas}</td><td>${((v.entregadas/v.total)*100).toFixed(0)}%</td></tr>`).join('');
+    } catch(e) { toast('Error al cargar stats'); }
+    hideOv();
 }
 
-function renderStats(d) {
-  const r    = d.resumen;
-  const conj = d.por_conjunto;
-  const acts = d.ultimas_actividades || [];
-
-  document.getElementById('s-grid').innerHTML = `
-    <div class="stat">
-      <div class="stat-n">${r.total.toLocaleString()}</div>
-      <div class="stat-l">Aptos en territorio</div>
-    </div>
-    <div class="stat s-naranja">
-      <div class="stat-n">${(parseFloat(r.elaboradas) + parseFloat(r.entregadas)).toLocaleString()}</div>
-      <div class="stat-l">Cartas hechas</div>
-    </div>
-    <div class="stat s-verde">
-      <div class="stat-n">${r.entregadas.toLocaleString()}</div>
-      <div class="stat-l">Entregadas</div>
-    </div>
-    <div class="stat s-dorado">
-      <div class="stat-n">${r.pct_entregadas}%</div>
-      <div class="stat-l">% Cubierto</div>
-    </div>`;
-
-  document.getElementById('s-progreso').innerHTML = `
-    <div class="prog">
-      <div class="prog-hd"><span>Cartas entregadas</span><span style="color:var(--verde)">${r.pct_entregadas}%</span></div>
-      <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
-      <div class="prog-sub">${r.entregadas} de ${r.total} apartamentos</div>
-    </div>
-    <div class="prog">
-      <div class="prog-hd"><span>Total elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
-      <div class="prog-bar"><div class="prog-fill orange" style="width:${r.pct_hechas}%"></div></div>
-      <div class="prog-sub">${parseFloat(r.elaboradas) + parseFloat(r.entregadas)} de ${r.total} apartamentos</div>
-    </div>`;
-
-  const rows = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
-  document.getElementById('s-tabla').innerHTML = `
-    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th></tr></thead>
-    <tbody>${rows.map(([n, v]) => {
-      const p = ((v.entregadas / v.total) * 100).toFixed(0);
-      return `<tr>
-        <td><strong>${n}</strong></td><td>${v.total}</td>
-        <td style="color:var(--naranja);font-weight:700">${v.elaboradas}</td>
-        <td style="color:var(--verde);font-weight:700">${v.entregadas}</td>
-        <td><div class="mini-bar"><div class="b"><div class="f" style="width:${p}%"></div></div><div class="p">${p}%</div></div></td>
-      </tr>`;
-    }).join('')}</tbody>`;
-
-  const aDiv = document.getElementById('s-acts');
-  if (!acts.length) {
-    aDiv.innerHTML = '<div class="empty"><div class="ei">📋</div><div class="et">Sin actividad aún.</div></div>';
-    return;
-  }
-  aDiv.innerHTML = acts.map(a => `
-    <div class="act-item ${a.tipo}">
-      <div class="act-ico">${a.tipo === 'elaborada' ? '✏️' : '📬'}</div>
-      <div class="act-txt">
-        <div class="n">${a.apto.conjunto} – ${fmt(a.apto)}</div>
-        <div class="f">${a.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtF(a.fecha)} (${desde(a.fecha)})</div>
-      </div>
-      <span class="badge ${a.tipo === 'elaborada' ? 'b-naranja' : 'b-verde'}">${a.tipo === 'elaborada' ? 'Elab.' : 'Entr.'}</span>
-    </div>`).join('');
+function goTab(t, el) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById('pg-'+t).classList.add('on');
+    el.classList.add('active');
+    if(t==='elaborar') cargarElab();
+    if(t==='entregar') cargarElab().then(renderPend);
+    if(t==='stats') cargarStats();
 }
 
-// ─── SERVICE WORKER ───────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
-}
-
-// ─── INIT ─────────────────────────────────────────────────
+// Iniciar
 cargarElab();
 </script>
+</body>
+</html>
