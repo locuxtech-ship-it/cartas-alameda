@@ -7,12 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AR Cartas">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Alameda del Río</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
-/* CSS ORIGINAL (Fiel al original) */
 :root {
   --azul-noche:  #0f2557; --azul-real: #1a3a8f; --azul-medio: #2d5bbf; --azul-claro: #4a7ad4;
   --azul-pale: #d6e4ff; --azul-bg: #f0f4ff; --dorado: #f0a500; --dorado-pale: #fff3cc;
@@ -23,6 +20,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(--texto); min-height: 100dvh; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+/* HEADER */
 .header { background: linear-gradient(135deg, var(--azul-noche) 0%, var(--azul-real) 100%); color: white; display: flex; align-items: center; gap: 12px; padding: 12px 16px; padding-top: calc(12px + env(safe-area-inset-top)); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 12px rgba(15,37,87,.4); }
 .logo-box { width: 38px; height: 38px; flex-shrink: 0; background: rgba(255,255,255,.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .logo-sobre { width: 24px; height: 17px; background: white; border-radius: 2px; position: relative; }
@@ -31,11 +29,13 @@ body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(
 .header-title { flex: 1; }
 .header-title strong { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; display: block; }
 .header-title span { font-size: .7rem; opacity: .6; text-transform: uppercase; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #4ade80; box-shadow: 0 0 0 2px rgba(74,222,128,.3); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
 .status-dot.off { background: #fb923c; }
+/* TABS */
 .tabs { background: #0b1d47; display: flex; position: sticky; top: calc(62px + env(safe-area-inset-top)); z-index: 49; }
 .tab { flex: 1; border: none; background: none; color: rgba(255,255,255,.45); font-weight: 600; font-size: .68rem; padding: 10px 4px 8px; display: flex; flex-direction: column; align-items: center; border-bottom: 3px solid transparent; }
 .tab.active { color: white; border-bottom-color: var(--dorado); }
+/* CONTENIDO */
 .page { display: none; padding: 16px 14px 90px; max-width: 600px; margin: 0 auto; }
 .page.on { display: block; }
 .card { background: white; border-radius: var(--radio-lg); padding: 18px 16px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(15,37,87,.08); border: 1px solid var(--gris-2); }
@@ -44,7 +44,7 @@ body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: .72rem; font-weight: 600; color: var(--texto-2); text-transform: uppercase; margin-bottom: 5px; }
 .field input { width: 100%; padding: 12px 14px; border: 2px solid var(--gris-2); border-radius: 9px; font-size: 1rem; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
 .btn-primary { background: var(--azul-medio); color: white; }
 .btn-ghost { background: var(--azul-bg); color: var(--azul-real); }
 .btn-dorado { background: var(--dorado); color: var(--azul-noche); }
@@ -52,68 +52,58 @@ body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(
 .btn-danger { background: #fee2e2; color: var(--rojo); }
 .btn-full { width: 100%; }
 .btn-sm { padding: 9px 14px; font-size: .8rem; }
-.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--gris-2); }
-.badge { display: inline-flex; padding: 3px 9px; border-radius: 99px; font-size: .68rem; font-weight: 700; text-transform: uppercase; }
-.b-gris { background: var(--gris-2); color: var(--texto-2); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.badge { display: inline-flex; padding: 3px 9px; border-radius: 99px; font-size: .68rem; font-weight: 700; }
 .b-naranja { background: var(--naranja-pale); color: var(--naranja); }
-.b-verde { background: var(--verde-pale); color: var(--verde); }
 .apto-list { display: flex; flex-direction: column; gap: 9px; }
-.apto-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radio); background: var(--gris-1); border: 1.5px solid var(--azul-pale); animation: up .25s ease both; }
-@keyframes up { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:none;} }
-.apto-num { width: 34px; height: 34px; border-radius: 50%; background: var(--azul-medio); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.apto-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radio); background: var(--gris-1); border: 1.5px solid var(--azul-pale); }
+.apto-num { width: 34px; height: 34px; border-radius: 50%; background: var(--azul-medio); color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .apto-info { flex: 1; min-width: 0; }
-.apto-info .conj { font-weight: 700; font-size: .92rem; }
-.apto-info .dir { font-size: .77rem; color: var(--texto-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.apto-info .det { font-size: .72rem; color: var(--texto-3); }
+.apto-info .conj { font-weight: 700; }
+.apto-info .dir { font-size: .77rem; color: var(--texto-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .search-wrap { position: relative; margin-bottom: 12px; }
-.search-wrap .ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); }
 .search-input { width: 100%; padding: 11px 14px 11px 38px; border: 2px solid var(--gris-2); border-radius: 9px; }
 .pend-item { padding: 13px 14px; border-radius: var(--radio); border: 1.5px solid var(--gris-2); background: white; margin-bottom: 10px; }
-.pend-main { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-.pend-info { flex: 1; }
-.pend-info .nombre { font-weight: 700; font-size: .92rem; }
-.pend-info .fecha { font-size: .72rem; color: var(--texto-3); }
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.stat { background: white; border-radius: var(--radio-lg); padding: 16px 14px; text-align: center; border: 1px solid var(--gris-2); border-top: 4px solid var(--azul-medio); }
+.stat { background: white; border-radius: var(--radio-lg); padding: 16px 14px; text-align: center; border-top: 4px solid var(--azul-medio); }
 .stat-n { font-family: 'Barlow Condensed', sans-serif; font-size: 1.9rem; font-weight: 700; }
-.stat-l { font-size: .68rem; color: var(--texto-3); text-transform: uppercase; font-weight: 600; }
-.mini-bar { display: flex; align-items: center; gap: 6px; }
-.mini-bar .b { flex: 1; height: 6px; background: var(--gris-2); border-radius: 99px; overflow: hidden; }
-.mini-bar .f { height: 100%; background: var(--verde); }
-.conj-table { width: 100%; border-collapse: collapse; font-size: .83rem; }
-.conj-table th { font-size: .67rem; text-transform: uppercase; color: var(--texto-3); padding: 7px 10px; background: var(--gris-1); text-align: left; }
-.conj-table td { padding: 9px 10px; border-bottom: 1px solid var(--gris-2); }
-.overlay { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.58); z-index: 200; align-items: center; justify-content: center; flex-direction: column; gap: 14px; }
+.stat-l { font-size: .68rem; color: var(--texto-3); text-transform: uppercase; }
+.prog-bar { height: 9px; background: var(--gris-2); border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--azul-medio); transition: width 0.8s; }
+.conj-table { width: 100%; border-collapse: collapse; font-size: .83rem; margin-top: 10px; }
+.conj-table th { text-align: left; font-size: .67rem; color: var(--texto-3); padding: 8px; }
+.conj-table td { padding: 8px; border-bottom: 1px solid var(--gris-2); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.7); z-index: 200; align-items: center; justify-content: center; flex-direction: column; color: white; }
 .overlay.on { display: flex; }
-.modal-bg { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.55); z-index: 300; align-items: flex-end; justify-content: center; }
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(10,25,70,.5); z-index: 300; align-items: flex-end; justify-content: center; }
 .modal-bg.on { display: flex; }
-.modal-box { background: white; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 540px; max-height: 80vh; overflow-y: auto; }
-.toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(70px); background: var(--azul-noche); color: white; padding: 11px 20px; border-radius: 99px; font-weight: 600; opacity: 0; transition: all .28s; z-index: 400; }
-.toast.on { transform: translateX(-50%) translateY(0); opacity: 1; }
+.modal-box { background: white; width: 100%; max-width: 540px; padding: 24px; border-radius: 20px 20px 0 0; max-height: 85vh; overflow-y: auto; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 50px; transition: 0.3s; z-index: 1000; }
+.toast.on { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="overlay" id="ov"><div class="spin" style="width:40px; height:40px; border:4px solid #fff3; border-top-color:var(--dorado); border-radius:50%; animation:rot .6s linear infinite"></div><div id="ov-msg" style="color:white; margin-top:10px">Procesando...</div></div>
-<style>@keyframes rot { to { transform: rotate(360deg); } }</style>
+<div id="ov" class="overlay"><div style="width:40px;height:40px;border:4px solid #fff3;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite"></div><div id="ov-msg" style="margin-top:15px">Cargando...</div></div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
-<div class="modal-bg" id="modal">
+<div id="modal" class="modal-bg">
   <div class="modal-box">
-    <h3 id="m-titulo" style="margin-bottom:10px; font-family:'Barlow Condensed'"></h3>
+    <h3 id="m-titulo"></h3>
     <div id="m-desc"></div>
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" id="m-ok">Confirmar</button>
+      <button class="btn btn-primary" id="m-ok">Aceptar</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div id="toast" class="toast"></div>
 
 <header class="header">
   <div class="logo-box"><div class="logo-sobre"><div class="logo-solapa"></div><div class="logo-sello">AR</div></div></div>
   <div class="header-title"><strong>Alameda del Río</strong><span>Gestión de Cartas</span></div>
-  <div class="status-dot" id="sdot"></div>
+  <div id="sdot" class="status-dot"></div>
 </header>
 
 <nav class="tabs">
@@ -123,42 +113,42 @@ body { font-family: 'Barlow', sans-serif; background: var(--gris-1); color: var(
 </nav>
 
 <!-- ELABORAR -->
-<div class="page on" id="pg-elaborar">
+<div id="pg-elaborar" class="page on">
   <div class="card">
     <div class="card-h">Generar cartas</div>
-    <div class="field"><label>Cantidad (Aleatorio)</label><input type="number" id="n-cartas" value="6" min="1" max="12"></div>
+    <div class="field"><label>Cantidad (Aleatorio)</label><input type="number" id="n-cartas" value="6"></div>
     <div style="display:flex; gap:10px">
         <button class="btn btn-primary btn-full" onclick="generarAleatorio()">🎲 Aleatorio</button>
-        <button class="btn btn-ghost btn-full" onclick="generarManual()">🔍 Manual</button>
+        <button class="btn btn-ghost btn-full" onclick="abrirManual()">🔍 Manual</button>
     </div>
   </div>
   <div id="bloque-sel" style="display:none">
     <div class="card">
-      <div class="card-h" id="sel-tipo-h">Selección propuesta</div>
+      <div class="card-h" id="sel-tipo-h">Selección actual</div>
       <div class="apto-list" id="lista-sel"></div>
       <div class="btn-row"><button class="btn btn-dorado btn-full" onclick="confirmarElab()">✅ Confirmar elaboración</button></div>
     </div>
   </div>
-  <div class="card"><div class="card-h">Pendientes de entrega hoy</div><div id="lista-elab"></div></div>
+  <div class="card"><div class="card-h">Por entregar hoy</div><div id="lista-elab"></div></div>
 </div>
 
 <!-- ENTREGAR -->
-<div class="page" id="pg-entregar">
+<div id="pg-entregar" class="page">
   <div class="card">
-    <div class="card-h">Pendientes</div>
-    <div class="search-wrap"><span class="ico">🔍</span><input type="search" class="search-input" id="filtro" placeholder="Buscar..." oninput="renderPend()"></div>
+    <div class="card-h">Listado de entrega</div>
+    <div class="search-wrap"><input type="search" class="search-input" id="filtro" placeholder="Buscar..." oninput="renderPend()"></div>
     <div id="lista-pend"></div>
   </div>
 </div>
 
 <!-- STATS -->
-<div class="page" id="pg-stats">
+<div id="pg-stats" class="page">
   <div id="s-grid" class="stats-grid"></div>
   <div class="card">
-    <div class="card-h">Progreso</div>
+    <div class="card-h">Progreso General</div>
     <div id="s-progreso"></div>
-    <div class="card-h" style="margin-top:15px">Por Conjunto</div>
-    <table class="conj-table" id="s-tabla"></table>
+    <div class="card-h" style="margin-top:20px">Avance por Conjunto</div>
+    <table id="s-tabla" class="conj-table"></table>
   </div>
 </div>
 
@@ -168,66 +158,73 @@ const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU
 let elaboradas = [];
 let disponiblesRaw = [];
 let selActual = [];
-let modalCb = null;
 
-// --- COMUNICACIÓN CON EL SCRIPT ---
-const apiGet = async (params) => {
-  const qs = new URLSearchParams(params).toString();
-  const res = await fetch(`${API}?${qs}`);
-  return res.json();
-};
+// --- API ---
+async function apiReq(params, method = 'GET', body = null) {
+    const url = method === 'GET' ? `${API}?${new URLSearchParams(params)}` : API;
+    const options = { method, redirect: 'follow' };
+    if (body) {
+        options.body = JSON.stringify(body);
+        // Usamos text/plain para evitar el preflight OPTIONS de CORS que Apps Script no maneja bien
+        options.headers = { 'Content-Type': 'text/plain' }; 
+    }
+    const res = await fetch(url, options);
+    return res.json();
+}
 
-const apiPost = async (data) => {
-  const res = await fetch(API, {
-    method: 'POST',
-    mode: 'no-cors', // Apps Script requiere esto para POST cruzado sin preflight complicado
-    body: JSON.stringify(data)
-  });
-  // Nota: con no-cors no podemos leer la respuesta, así que asumimos OK o refrescamos.
-  return { ok: true }; 
-};
-
-// --- UTILIDADES ---
-const fmt = a => `Apto ${a.apto}${a.torre ? ' · T'+a.torre : ''}`;
-const showOv = msg => { document.getElementById('ov-msg').textContent = msg; document.getElementById('ov').classList.add('on'); };
+// --- UTILS ---
+const showOv = m => { document.getElementById('ov-msg').textContent = m; document.getElementById('ov').classList.add('on'); };
 const hideOv = () => document.getElementById('ov').classList.remove('on');
-const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast on'; setTimeout(()=>t.classList.remove('on'), 3000); };
-const openModal = (t, d, cb) => { document.getElementById('m-titulo').textContent = t; document.getElementById('m-desc').innerHTML = d; modalCb = cb; document.getElementById('modal').classList.add('on'); };
+const toast = m => { const t = document.getElementById('toast'); t.textContent = m; t.className = 'toast on'; setTimeout(()=>t.classList.remove('on'), 3000); };
+const openModal = (t, d, cb) => { 
+    document.getElementById('m-titulo').textContent = t; 
+    document.getElementById('m-desc').innerHTML = d; 
+    document.getElementById('m-ok').onclick = cb;
+    document.getElementById('modal').classList.add('on'); 
+};
 const closeModal = () => document.getElementById('modal').classList.remove('on');
-document.getElementById('m-ok').onclick = () => { if(modalCb) modalCb(); };
+const fmt = a => `Apto ${a.apto}${a.torre ? ' · T'+a.torre : ''}`;
 
-// --- LÓGICA ELABORAR ---
+// --- ELABORAR ---
 async function generarAleatorio() {
     showOv('Buscando...');
     try {
-        const res = await apiGet({ action: 'disponibles' });
+        const res = await apiReq({ action: 'disponibles' });
         const data = res.data || [];
         const n = parseInt(document.getElementById('n-cartas').value) || 6;
-        const conjs = [...new Set(data.map(a => a.conjunto))].sort(() => Math.random() - 0.5).slice(0, n);
-        selActual = conjs.map(c => { const list = data.filter(a => a.conjunto === c); return list[Math.floor(Math.random() * list.length)]; });
+        const picks = data.sort(() => Math.random() - 0.5).slice(0, n);
+        selActual = picks;
         renderSel("Aleatoria");
     } catch(e) { toast('Error de conexión'); }
     hideOv();
 }
 
-async function generarManual() {
-    showOv('Cargando...');
+async function abrirManual() {
+    showOv('Cargando lista...');
     try {
-        const res = await apiGet({ action: 'disponibles' });
+        const res = await apiReq({ action: 'disponibles' });
         disponiblesRaw = res.data || [];
-        const html = `<input type="text" class="search-input" placeholder="Filtrar..." oninput="filterM(this.value)" style="margin-bottom:10px">
-                      <div id="m-list" style="max-height:300px; overflow-y:auto">${renderMItems(disponiblesRaw)}</div>`;
-        openModal("Selección Manual", html, () => { if(selActual.length) renderSel("Manual"); closeModal(); });
+        const html = `
+            <input type="text" class="search-input" placeholder="Filtrar..." oninput="filterM(this.value)" style="margin-bottom:15px">
+            <div id="m-list" style="max-height:350px; overflow-y:auto">
+                ${renderMItems(disponiblesRaw)}
+            </div>`;
+        openModal("Selección Manual", html, () => {
+            if(selActual.length) renderSel("Manual");
+            closeModal();
+        });
     } catch(e) { toast('Error'); }
     hideOv();
 }
 
 function renderMItems(lista) {
-    return lista.map(a => `<div onclick="toggleM(this, ${a.id})" style="padding:10px; border-bottom:1px solid #eee; cursor:pointer; background:${selActual.some(s=>s.id===a.id)?'#fff3cc':''}">
-        <strong>${a.conjunto}</strong> - ${fmt(a)}</div>`).join('');
+    return lista.map(a => `
+        <div onclick="toggleM(this, ${a.id})" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:${selActual.some(s=>s.id===a.id)?'#fff3cc':''}">
+            <strong>${a.conjunto}</strong> - ${fmt(a)}
+        </div>`).join('');
 }
-function filterM(val) {
-    const f = disponiblesRaw.filter(a => a.conjunto.toLowerCase().includes(val.toLowerCase()) || String(a.apto).includes(val));
+function filterM(v) {
+    const f = disponiblesRaw.filter(a => a.conjunto.toLowerCase().includes(v.toLowerCase()) || String(a.apto).includes(v));
     document.getElementById('m-list').innerHTML = renderMItems(f);
 }
 function toggleM(el, id) {
@@ -236,80 +233,96 @@ function toggleM(el, id) {
     else { selActual.push(disponiblesRaw.find(a => a.id === id)); el.style.background = '#fff3cc'; }
 }
 
-function renderSel(tipo) {
-    document.getElementById('sel-tipo-h').textContent = "Selección " + tipo;
-    document.getElementById('lista-sel').innerHTML = selActual.map(a => `<div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div class="dir">${fmt(a)}</div></div></div>`).join('');
+function renderSel(t) {
+    document.getElementById('sel-tipo-h').textContent = "Selección " + t;
+    document.getElementById('lista-sel').innerHTML = selActual.map(a => `<div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div>${fmt(a)}</div></div></div>`).join('');
     document.getElementById('bloque-sel').style.display = 'block';
 }
 
 async function confirmarElab() {
     showOv('Guardando...');
-    const payload = { action: 'marcar_elaborada', ids: selActual.map(a => a.id), fecha: new Date().toISOString() };
-    await apiPost(payload);
-    // Como no-cors no nos deja leer, esperamos un segundo y refrescamos
-    setTimeout(() => { 
-        selActual = []; 
-        document.getElementById('bloque-sel').style.display = 'none';
-        cargarElab();
-        hideOv();
-        toast('Cartas marcadas como elaboradas');
-    }, 1500);
+    try {
+        const res = await apiReq({}, 'POST', { 
+            action: 'marcar_elaborada', 
+            ids: selActual.map(a => a.id), 
+            fecha: new Date().toISOString() 
+        });
+        if(res.ok) {
+            toast('Guardado con éxito');
+            selActual = [];
+            document.getElementById('bloque-sel').style.display = 'none';
+            cargarElab();
+        } else { toast('Error: ' + res.error); }
+    } catch(e) { toast('Error de conexión'); }
+    hideOv();
 }
 
 async function cargarElab() {
-    const res = await apiGet({ action: 'elaboradas' });
-    elaboradas = res.data || [];
-    document.getElementById('lista-elab').innerHTML = elaboradas.map(a => `<div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div>${fmt(a)}</div></div><span class="badge b-naranja">Lista</span></div>`).join('');
+    try {
+        const res = await apiReq({ action: 'elaboradas' });
+        elaboradas = res.data || [];
+        document.getElementById('lista-elab').innerHTML = elaboradas.map(a => `
+            <div class="apto-item"><div class="apto-info"><strong>${a.conjunto}</strong><div>${fmt(a)}</div></div><span class="badge b-naranja">Elaborada</span></div>
+        `).join('') || '<div style="text-align:center;padding:20px;color:#999">No hay cartas listas</div>';
+    } catch(e) {}
 }
 
-// --- LÓGICA ENTREGAR ---
+// --- ENTREGAR ---
 function renderPend() {
     const q = document.getElementById('filtro').value.toLowerCase();
-    const lista = elaboradas.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q));
-    document.getElementById('lista-pend').innerHTML = lista.map(a => `
+    const list = elaboradas.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q));
+    document.getElementById('lista-pend').innerHTML = list.map(a => `
         <div class="pend-item">
-            <div class="pend-main"><strong>${a.conjunto}</strong> - ${fmt(a)}</div>
-            <div class="pend-actions">
-                <button class="btn btn-verde btn-sm" onclick="marcarEntr(${a.id})">📬 Entregada</button>
+            <div style="margin-bottom:10px"><strong>${a.conjunto}</strong> - ${fmt(a)}</div>
+            <div style="display:flex;gap:10px">
+                <button class="btn btn-verde btn-sm btn-full" onclick="marcarEntr(${a.id})">📬 Entregada</button>
                 <button class="btn btn-danger btn-sm" onclick="revertir(${a.id})">↩️</button>
             </div>
-        </div>`).join('');
+        </div>`).join('') || '<div style="text-align:center;padding:20px;color:#999">Nada pendiente</div>';
 }
 
 async function marcarEntr(id) {
-    showOv('Guardando...');
-    await apiPost({ action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
-    setTimeout(() => { cargarElab().then(renderPend); hideOv(); }, 1200);
+    showOv('Procesando...');
+    try {
+        const res = await apiReq({}, 'POST', { action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
+        if(res.ok) { cargarElab().then(renderPend); toast('Entregada'); }
+    } catch(e) {}
+    hideOv();
 }
 
 async function revertir(id) {
+    if(!confirm("¿Devolver a disponible?")) return;
     showOv('Revirtiendo...');
-    await apiPost({ action: 'deshacer', ids: [id] });
-    setTimeout(() => { cargarElab().then(renderPend); hideOv(); }, 1200);
+    try {
+        const res = await apiReq({}, 'POST', { action: 'deshacer', ids: [id] });
+        if(res.ok) { cargarElab().then(renderPend); toast('Revertido'); }
+    } catch(e) {}
+    hideOv();
 }
 
-// --- LÓGICA STATS ---
+// --- STATS ---
 async function cargarStats() {
-    showOv('Cargando...');
-    const d = await apiGet({ action: 'estadisticas' });
-    const r = d.resumen;
-    document.getElementById('s-grid').innerHTML = `
-        <div class="stat"><div class="stat-n">${r.total}</div><div class="stat-l">Total</div></div>
-        <div class="stat s-verde"><div class="stat-n">${r.entregadas}</div><div class="stat-l">Entregadas</div></div>
-        <div class="stat s-naranja"><div class="stat-n">${r.elaboradas}</div><div class="stat-l">Pendientes</div></div>
-        <div class="stat s-dorado"><div class="stat-n">${r.pct_entregadas}%</div><div class="stat-l">Avance</div></div>`;
-    
-    document.getElementById('s-progreso').innerHTML = `<div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>`;
-    
-    const rows = Object.entries(d.por_conjunto).sort((a,b)=>b[1].total - a[1].total);
-    document.getElementById('s-tabla').innerHTML = `<tr><th>Conjunto</th><th>Total</th><th>Entr.</th><th>%</th></tr>` + 
-        rows.map(([n,v])=>`<tr><td>${n}</td><td>${v.total}</td><td>${v.entregadas}</td><td>${((v.entregadas/v.total)*100).toFixed(0)}%</td></tr>`).join('');
+    showOv('Cargando estadísticas...');
+    try {
+        const d = await apiReq({ action: 'estadisticas' });
+        const r = d.resumen;
+        document.getElementById('s-grid').innerHTML = `
+            <div class="stat"><div class="stat-n">${r.total}</div><div class="stat-l">Total</div></div>
+            <div class="stat"><div class="stat-n">${r.entregadas}</div><div class="stat-l">Entregadas</div></div>
+            <div class="stat"><div class="stat-n">${r.elaboradas}</div><div class="stat-l">Pendientes</div></div>
+            <div class="stat"><div class="stat-n">${r.pct_entregadas}%</div><div class="stat-l">Avance</div></div>`;
+        document.getElementById('s-progreso').innerHTML = `<div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>`;
+        
+        const rows = Object.entries(d.por_conjunto).sort((a,b)=>b[1].total - a[1].total);
+        document.getElementById('s-tabla').innerHTML = `<tr><th>Conjunto</th><th>Total</th><th>Entr.</th><th>%</th></tr>` +
+            rows.map(([n,v]) => `<tr><td>${n}</td><td>${v.total}</td><td>${v.entregadas}</td><td>${((v.entregadas/v.total)*100).toFixed(0)}%</td></tr>`).join('');
+    } catch(e) { toast('Error al cargar stats'); }
     hideOv();
 }
 
 function goTab(t, el) {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-    document.querySelectorAll('.tab').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
     document.getElementById('pg-'+t).classList.add('on');
     el.classList.add('active');
     if(t==='elaborar') cargarElab();
@@ -317,6 +330,7 @@ function goTab(t, el) {
     if(t==='stats') cargarStats();
 }
 
+// Iniciar
 cargarElab();
 </script>
 </body>
