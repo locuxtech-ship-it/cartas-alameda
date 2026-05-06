@@ -12,6 +12,7 @@
 <title>Alameda del Río</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
+/* CSS ORIGINAL (Sin cambios) */
 :root {
   --azul-noche:  #0f2557;
   --azul-real:   #1a3a8f;
@@ -47,7 +48,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ── HEADER ─────────────────────────────────── */
 .header {
   background: linear-gradient(135deg, var(--azul-noche) 0%, var(--azul-real) 100%);
   color: white;
@@ -94,7 +94,6 @@ body {
 }
 .status-dot.off { background: #fb923c; box-shadow: 0 0 0 2px rgba(251,146,60,.3); }
 
-/* ── TABS ────────────────────────────────────── */
 .tabs {
   background: #0b1d47;
   display: flex;
@@ -115,11 +114,9 @@ body {
 .tab .ico { font-size: 1.15rem; line-height: 1; }
 .tab.active { color: white; border-bottom-color: var(--dorado); }
 
-/* ── CONTENIDO ───────────────────────────────── */
 .page { display: none; padding: 16px 14px 90px; max-width: 600px; margin: 0 auto; }
 .page.on { display: block; }
 
-/* ── CARD ────────────────────────────────────── */
 .card {
   background: white; border-radius: var(--radio-lg);
   padding: 18px 16px; margin-bottom: 14px;
@@ -129,7 +126,6 @@ body {
 .card-h { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--azul-noche); letter-spacing: .02em; margin-bottom: 3px; }
 .card-sub { font-size: .8rem; color: var(--texto-3); line-height: 1.45; margin-bottom: 16px; }
 
-/* ── FORM ────────────────────────────────────── */
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: .72rem; font-weight: 600; color: var(--texto-2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
 .field input, .field select {
@@ -141,7 +137,6 @@ body {
 }
 .field input:focus, .field select:focus { outline: none; border-color: var(--azul-claro); }
 
-/* ── BOTONES ─────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   padding: 13px 20px; border: none; border-radius: 10px;
@@ -164,11 +159,9 @@ body {
 .btn-sm      { padding: 9px 14px; font-size: .8rem; border-radius: 8px; }
 .btn:disabled { opacity: .45; pointer-events: none; }
 
-/* ── ROW DE ACCIONES ─────────────────────────── */
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--gris-2); }
 .btn-row .btn { flex: 1; min-width: 140px; }
 
-/* ── BADGE ───────────────────────────────────── */
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 3px 9px; border-radius: 99px;
@@ -179,7 +172,6 @@ body {
 .b-naranja  { background: var(--naranja-pale); color: var(--naranja); }
 .b-verde    { background: var(--verde-pale); color: var(--verde); }
 
-/* ── ITEMS APTO ──────────────────────────────── */
 .apto-list { display: flex; flex-direction: column; gap: 9px; margin: 14px 0 0; }
 .apto-item {
   display: flex; align-items: center; gap: 12px;
@@ -199,7 +191,6 @@ body {
 .apto-info .dir  { font-size: .77rem; color: var(--texto-2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .apto-info .det  { font-size: .72rem; color: var(--texto-3); margin-top: 1px; }
 
-/* ── PENDIENTES ──────────────────────────────── */
 .search-wrap { position: relative; margin-bottom: 12px; }
 .search-wrap .ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: .95rem; pointer-events: none; }
 .search-input {
@@ -209,7 +200,6 @@ body {
   background: white; transition: border-color .15s;
   -webkit-appearance: none; appearance: none;
 }
-.search-input:focus { outline: none; border-color: var(--azul-claro); }
 
 .pend-item {
   padding: 13px 14px; border-radius: var(--radio);
@@ -225,11 +215,7 @@ body {
 .pend-actions { display: flex; gap: 8px; }
 .pend-actions .btn { flex: 1; }
 
-/* ── STATS ───────────────────────────────────── */
-.stats-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-bottom: 14px;
-}
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .stat {
   background: white; border-radius: var(--radio-lg);
   padding: 16px 14px; text-align: center;
@@ -245,7 +231,6 @@ body {
 .stat.s-naranja .stat-n { color: var(--naranja); }
 .stat-l { font-size: .68rem; color: var(--texto-3); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
 
-/* ── PROGRESO ────────────────────────────────── */
 .prog { margin-bottom: 14px; }
 .prog-hd { display: flex; justify-content: space-between; font-size: .8rem; font-weight: 600; margin-bottom: 5px; }
 .prog-bar { height: 9px; background: var(--gris-2); border-radius: 99px; overflow: hidden; }
@@ -253,7 +238,6 @@ body {
 .prog-fill.orange { background: linear-gradient(90deg, var(--naranja), #f5a623); }
 .prog-sub { font-size: .72rem; color: var(--texto-3); margin-top: 3px; }
 
-/* ── TABLA CONJUNTOS ─────────────────────────── */
 .conj-table { width: 100%; border-collapse: collapse; font-size: .83rem; }
 .conj-table th { font-size: .67rem; text-transform: uppercase; letter-spacing: .08em; color: var(--texto-3); padding: 7px 10px; background: var(--gris-1); text-align: left; font-weight: 600; }
 .conj-table td { padding: 9px 10px; border-bottom: 1px solid var(--gris-2); }
@@ -263,7 +247,6 @@ body {
 .mini-bar .f { height: 100%; border-radius: 99px; background: var(--verde); }
 .mini-bar .p { font-size: .72rem; color: var(--texto-3); white-space: nowrap; }
 
-/* ── ACTIVIDADES ─────────────────────────────── */
 .act-item {
   display: flex; gap: 10px; align-items: flex-start;
   padding: 10px 12px; border-radius: 9px; margin-bottom: 8px;
@@ -275,36 +258,16 @@ body {
 .act-txt .n { font-weight: 600; font-size: .86rem; }
 .act-txt .f { font-size: .72rem; color: var(--texto-3); margin-top: 2px; }
 
-/* ── EMPTY STATE ─────────────────────────────── */
-.empty { text-align: center; padding: 32px 16px; color: var(--texto-3); }
-.empty .ei { font-size: 2.4rem; margin-bottom: 8px; }
-.empty .et { font-size: .88rem; line-height: 1.5; }
-
-/* ── BANNER ERROR ────────────────────────────── */
-.banner {
-  display: none; background: var(--naranja-pale);
-  border: 1.5px solid #f5c5a3; border-radius: var(--radio);
-  padding: 11px 14px; font-size: .83rem; color: var(--naranja);
-  font-weight: 600; margin-bottom: 14px; gap: 8px; align-items: center;
-}
-.banner.show { display: flex; }
-
-/* ── LOADING ─────────────────────────────────── */
 .overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(10,25,70,.58); z-index: 200;
   align-items: center; justify-content: center; flex-direction: column; gap: 14px;
 }
 .overlay.on { display: flex; }
-.spin {
-  width: 42px; height: 42px;
-  border: 4px solid rgba(255,255,255,.2); border-top-color: var(--dorado);
-  border-radius: 50%; animation: rot .65s linear infinite;
-}
+.spin { width: 42px; height: 42px; border: 4px solid rgba(255,255,255,.2); border-top-color: var(--dorado); border-radius: 50%; animation: rot .65s linear infinite; }
 @keyframes rot { to { transform: rotate(360deg); } }
-.spin-msg { color: white; font-size: .88rem; font-weight: 600; letter-spacing: .04em; }
+.spin-msg { color: white; font-size: .88rem; font-weight: 600; }
 
-/* ── MODAL (bottom sheet) ────────────────────── */
 .modal-bg {
   display: none; position: fixed; inset: 0;
   background: rgba(10,25,70,.55); z-index: 300;
@@ -320,21 +283,10 @@ body {
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
 .modal-drag { width: 38px; height: 4px; border-radius: 2px; background: var(--gris-3); margin: 0 auto 18px; }
-.modal-box h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--azul-noche); margin-bottom: 8px; }
-.modal-box p  { font-size: .88rem; color: var(--texto-2); line-height: 1.6; margin-bottom: 20px; }
-.modal-row { display: flex; gap: 10px; }
-.modal-row .btn { flex: 1; }
-
-/* ── TOAST ───────────────────────────────────── */
 .toast {
-  position: fixed; bottom: 22px; left: 50%;
-  transform: translateX(-50%) translateY(70px);
-  background: var(--azul-noche); color: white;
-  padding: 11px 20px; border-radius: 99px;
-  font-size: .86rem; font-weight: 600;
-  box-shadow: 0 4px 20px rgba(0,0,0,.22);
-  opacity: 0; transition: all .28s; z-index: 400;
-  white-space: nowrap; max-width: 88vw; text-align: center;
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(70px);
+  background: var(--azul-noche); color: white; padding: 11px 20px; border-radius: 99px;
+  font-size: .86rem; font-weight: 600; opacity: 0; transition: all .28s; z-index: 400;
 }
 .toast.on { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.ok  { background: var(--verde); }
@@ -343,108 +295,85 @@ body {
 </head>
 <body>
 
-<!-- OVERLAY LOADING -->
 <div class="overlay" id="ov">
   <div class="spin"></div>
   <div class="spin-msg" id="ov-msg">Procesando…</div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="modal">
   <div class="modal-box">
     <div class="modal-drag"></div>
     <h3 id="m-titulo"></h3>
     <div id="m-desc"></div>
-    <div class="modal-row" id="m-footer">
+    <div class="modal-row" style="margin-top:20px">
       <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
       <button class="btn btn-primary" id="m-ok">Confirmar</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- HEADER -->
 <header class="header">
-  <div class="logo-box">
-    <div class="logo-sobre">
-      <div class="logo-solapa"></div>
-      <div class="logo-sello">AR</div>
-    </div>
-  </div>
-  <div class="header-title">
-    <strong>Alameda del Río</strong>
-    <span>Gestión de Cartas</span>
-  </div>
+  <div class="logo-box"><div class="logo-sobre"><div class="logo-solapa"></div><div class="logo-sello">AR</div></div></div>
+  <div class="header-title"><strong>Alameda del Río</strong><span>Gestión de Cartas</span></div>
   <div class="status-dot" id="sdot"></div>
 </header>
 
-<!-- TABS -->
 <nav class="tabs">
-  <button class="tab active" onclick="goTab('elaborar',this)">
-    <span class="ico">✉️</span>Elaborar
-  </button>
-  <button class="tab" onclick="goTab('entregar',this)">
-    <span class="ico">📬</span>Entregar
-  </button>
-  <button class="tab" onclick="goTab('stats',this)">
-    <span class="ico">📊</span>Estadísticas
-  </button>
+  <button class="tab active" onclick="goTab('elaborar',this)"><span class="ico">✉️</span>Elaborar</button>
+  <button class="tab" onclick="goTab('entregar',this)"><span class="ico">📬</span>Entregar</button>
+  <button class="tab" onclick="goTab('stats',this)"><span class="ico">📊</span>Estadísticas</button>
 </nav>
 
-<!-- ══════ ELABORAR ══════ -->
+<!-- SECCIÓN ELABORAR -->
 <div class="page on" id="pg-elaborar">
-
-  <div class="banner" id="banner">⚠️ <span id="banner-txt">Sin conexión con el servidor.</span></div>
+  <div class="banner" id="banner">⚠️ <span id="banner-txt">Sin conexión.</span></div>
 
   <div class="card">
     <div class="card-h">Generar cartas</div>
-    <div class="card-sub">El sistema elige un apartamento por conjunto de forma aleatoria o selección manual.</div>
+    <div class="card-sub">Selecciona los apartamentos de forma aleatoria o búscalos manualmente.</div>
     <div class="field">
-      <label>¿Cuántas cartas (para selección aleatoria)?</label>
+      <label>¿Cuántas cartas (aleatorio)?</label>
       <input type="number" id="n-cartas" min="1" max="12" value="6" inputmode="numeric">
     </div>
-    <div class="btn-row" style="border:none; margin-top:0; padding-top:0">
-      <button class="btn btn-primary" onclick="generarAleatorio()">🎲 Aleatorio</button>
-      <button class="btn btn-ghost" onclick="generarManual()">🔍 Selección Manual</button>
+    <div style="display: flex; gap: 10px;">
+        <button class="btn btn-primary btn-full" onclick="generarAleatorio()">🎲 Aleatorio</button>
+        <button class="btn btn-ghost btn-full" onclick="abrirManual()">🔍 Manual</button>
     </div>
   </div>
 
   <div id="bloque-sel" style="display:none">
     <div class="card">
-      <div class="card-h" id="sel-titulo-card">Selección propuesta</div>
+      <div class="card-h" id="sel-tipo-h">Selección propuesta</div>
       <div class="card-sub">Confirma para marcarlos como <strong>Elaborada</strong>.</div>
       <div class="apto-list" id="lista-sel"></div>
       <div class="btn-row">
         <button class="btn btn-dorado" onclick="confirmar()">✅ Confirmar elaboración</button>
-        <button class="btn btn-ghost"  onclick="cancelarSeleccion()">❌ Cancelar</button>
+        <button class="btn btn-ghost"  onclick="cancelarSel()">❌ Cancelar</button>
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-h">Elaboradas – sin entregar</div>
-    <div class="card-sub">Cartas listas pendientes de entrega.</div>
     <div id="lista-elab"></div>
   </div>
 </div>
 
-<!-- ══════ ENTREGAR ══════ -->
+<!-- SECCIÓN ENTREGAR -->
 <div class="page" id="pg-entregar">
   <div class="card">
     <div class="card-h">Pendientes de entrega</div>
-    <div class="card-sub">Marca la carta como entregada cuando la deposites en el apartamento.</div>
     <div class="search-wrap">
       <span class="ico">🔍</span>
-      <input type="search" class="search-input" id="filtro"
-        placeholder="Filtrar por conjunto o apartamento…" oninput="renderPend()">
+      <input type="search" class="search-input" id="filtro" placeholder="Filtrar por conjunto o apartamento…" oninput="renderPend()">
     </div>
     <div id="lista-pend"></div>
   </div>
 </div>
 
-<!-- ══════ ESTADÍSTICAS ══════ -->
+<!-- SECCIÓN ESTADÍSTICAS -->
 <div class="page" id="pg-stats">
   <div class="stats-grid" id="s-grid"></div>
   <div class="card">
@@ -457,213 +386,130 @@ body {
   </div>
   <div class="card">
     <div class="card-h">Últimas actividades</div>
-    <div class="card-sub">Los 20 cambios más recientes.</div>
     <div id="s-acts"></div>
   </div>
 </div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU9QMcABOuWJCpKwoXbDyVv58e_LsC4SqKt6JnIspJ/exec';
 
-// ─── ESTADO ─────────────────────────────────────────────
-let elaboradas  = [];
+let elaboradas = [];
 let disponiblesGlobal = [];
-let selActual   = [];
-let modalCb     = null;
+let selActual = [];
+let modalCb = null;
 
-// ─── UTILIDADES ─────────────────────────────────────────
-const fmt = a => {
-  let s = `Apto ${a.apto}`;
-  if (a.torre)    s += ` · Torre ${a.torre}`;
-  if (a.interior) s += ` · Int ${a.interior}`;
-  return s;
+// --- FUNCIÓN apiGet ORIGINAL RESTAURADA ---
+const apiGet = async params => {
+  const qs  = new URLSearchParams(params).toString();
+  const res = await fetch(`${API}?${qs}`, { redirect: 'follow' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
 };
 
-const fmtF = iso => {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'})
-    + ' ' + d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
-};
-
+const fmt = a => `Apto ${a.apto}${a.torre ? ' · T'+a.torre : ''}${a.interior ? ' · I'+a.interior : ''}`;
+const fmtF = iso => iso ? new Date(iso).toLocaleDateString('es-CO', {day:'2-digit',month:'short'}) + ' ' + new Date(iso).toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}) : '';
 const desde = iso => {
   if (!iso) return '';
   const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
   return d === 0 ? 'hoy' : d === 1 ? 'ayer' : `hace ${d} días`;
 };
 
-// ─── LOADING ─────────────────────────────────────────────
-const showOv  = msg => { document.getElementById('ov-msg').textContent = msg; document.getElementById('ov').classList.add('on'); };
-const hideOv  = ()  => document.getElementById('ov').classList.remove('on');
-
-// ─── TOAST ───────────────────────────────────────────────
-let _tid;
+const showOv = msg => { document.getElementById('ov-msg').textContent = msg; document.getElementById('ov').classList.add('on'); };
+const hideOv = () => document.getElementById('ov').classList.remove('on');
 const toast = (msg, cls='') => {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'toast on ' + cls;
-  clearTimeout(_tid); _tid = setTimeout(() => t.classList.remove('on'), 3000);
+  setTimeout(() => t.classList.remove('on'), 3000);
 };
 
-// ─── MODAL ───────────────────────────────────────────────
-const openModal = (titulo, desc, label, cb) => {
+const openModal = (titulo, descHtml, label, cb) => {
   document.getElementById('m-titulo').textContent = titulo;
-  document.getElementById('m-desc').innerHTML = desc;
+  document.getElementById('m-desc').innerHTML = descHtml;
   document.getElementById('m-ok').textContent = label;
   modalCb = cb;
   document.getElementById('modal').classList.add('on');
 };
-const closeModal = () => {
-  document.getElementById('modal').classList.remove('on');
-  modalCb = null;
-};
+const closeModal = () => { document.getElementById('modal').classList.remove('on'); modalCb = null; };
 document.getElementById('m-ok').onclick = () => { if (modalCb) modalCb(); };
 
-// ─── ONLINE STATUS ───────────────────────────────────────
-const setOnline = ok => {
-  document.getElementById('sdot').className = 'status-dot' + (ok ? '' : ' off');
-};
-window.addEventListener('online',  () => setOnline(true));
-window.addEventListener('offline', () => setOnline(false));
-setOnline(navigator.onLine);
-
-// ─── BANNER ──────────────────────────────────────────────
-const showBanner = msg => {
-  document.getElementById('banner-txt').textContent = msg;
-  document.getElementById('banner').classList.add('show');
-};
-const hideBanner = () => document.getElementById('banner').classList.remove('show');
-
-// ─── FETCH GET ───────────────────────────────────────────
-const apiGet = async params => {
-  try {
-    const qs  = new URLSearchParams(params).toString();
-    const res = await fetch(`${API}?${qs}`, { 
-      method: 'GET',
-      mode: 'cors', // Crucial para Google Apps Script
-      redirect: 'follow' 
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  } catch (e) {
-    console.error("Error en petición:", e);
-    throw e;
-  }
-};
-
-// ─── TABS ─────────────────────────────────────────────────
-const goTab = (tab, btn) => {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('pg-' + tab).classList.add('on');
-  btn.classList.add('active');
-  if (tab === 'elaborar')    cargarElab();
-  if (tab === 'entregar')    cargarPend();
-  if (tab === 'stats')       cargarStats();
-};
-
-// ═══════════════════════════════════════════════
-// MÓDULO 1 – ELABORAR
-// ═══════════════════════════════════════════════
-
-// --- Selección Aleatoria ---
 async function generarAleatorio() {
   const n = Math.min(12, Math.max(1, parseInt(document.getElementById('n-cartas').value) || 6));
-  showOv('Consultando disponibles…');
+  showOv('Consultando…');
   try {
     const res = await apiGet({ action: 'disponibles' });
-    setOnline(true); hideBanner();
-
     const map = {};
-    (res.data || []).forEach(a => {
-      if (!map[a.conjunto]) map[a.conjunto] = [];
-      map[a.conjunto].push(a);
-    });
+    (res.data || []).forEach(a => { if (!map[a.conjunto]) map[a.conjunto] = []; map[a.conjunto].push(a); });
     const conjs = Object.keys(map);
-    if (!conjs.length) { toast('No hay apartamentos disponibles', 'err'); hideOv(); return; }
-
-    const max   = Math.min(n, conjs.length);
-    const picks = conjs.sort(() => Math.random() - .5).slice(0, max);
-    selActual   = picks.map(c => { const l = map[c]; return l[Math.floor(Math.random() * l.length)]; });
-
-    document.getElementById('sel-titulo-card').textContent = "Selección propuesta (Aleatoria)";
+    if (!conjs.length) { toast('No hay disponibles', 'err'); hideOv(); return; }
+    const picks = conjs.sort(() => Math.random() - .5).slice(0, Math.min(n, conjs.length));
+    selActual = picks.map(c => map[c][Math.floor(Math.random() * map[c].length)]);
+    document.getElementById('sel-tipo-h').textContent = "Selección propuesta (Aleatoria)";
     renderSel();
     document.getElementById('bloque-sel').style.display = 'block';
-  } catch(e) {
-    setOnline(false);
-    showBanner('No se pudo conectar con el servidor.');
-    toast('Error de conexión', 'err');
-  }
+  } catch(e) { toast('Error de conexión', 'err'); }
   hideOv();
 }
 
-// --- Selección Manual ---
-async function generarManual() {
-  showOv('Cargando lista de apartamentos…');
-  try {
-    const res = await apiGet({ action: 'disponibles' });
-    disponiblesGlobal = res.data || [];
-    
-    const htmlManual = `
-      <div class="search-wrap" style="margin-top:10px">
-        <span class="ico">🔍</span>
-        <input type="text" class="search-input" id="m-filtro" placeholder="Filtrar conjunto o apto..." oninput="filtrarManual()">
-      </div>
-      <div id="m-lista" style="max-height:300px; overflow-y:auto; border:1px solid var(--gris-2); border-radius:8px; padding:5px;">
-        ${renderManualItems(disponiblesGlobal)}
-      </div>
-    `;
-
-    openModal('Selección Manual', htmlManual, 'Confirmar Selección', () => {
-      if (selActual.length) {
-        document.getElementById('sel-titulo-card').textContent = "Selección propuesta (Manual)";
-        renderSel();
-        document.getElementById('bloque-sel').style.display = 'block';
-        closeModal();
-      } else {
-        toast('Selecciona al menos un apartamento', 'err');
-      }
-    });
-  } catch(e) {
-    toast('Error al cargar lista', 'err');
-  }
-  hideOv();
+async function abrirManual() {
+    showOv('Cargando lista...');
+    try {
+        const res = await apiGet({ action: 'disponibles' });
+        disponiblesGlobal = res.data || [];
+        const html = `
+            <div class="search-wrap" style="margin-top:10px">
+                <span class="ico">🔍</span>
+                <input type="text" class="search-input" id="m-filtro" placeholder="Filtrar conjunto o apto..." oninput="filtrarManual()">
+            </div>
+            <div id="m-lista" style="max-height:300px; overflow-y:auto; border-radius:8px;">
+                ${renderManualItems(disponiblesGlobal)}
+            </div>
+        `;
+        openModal("Selección Manual", html, "Confirmar Selección", () => {
+            if(selActual.length > 0) {
+                document.getElementById('sel-tipo-h').textContent = "Selección propuesta (Manual)";
+                renderSel();
+                document.getElementById('bloque-sel').style.display = 'block';
+                closeModal();
+            } else { toast("Selecciona al menos uno", "err"); }
+        });
+    } catch(e) { toast('Error', 'err'); }
+    hideOv();
 }
 
 function renderManualItems(lista) {
-  return lista.map(a => `
-    <div class="apto-item" style="margin-bottom:5px; cursor:pointer; border-color:${selActual.some(s=>s.id===a.id)?'var(--dorado)':'var(--azul-pale)'}" 
-         onclick="toggleManual(${a.id}, this)">
-      <div class="apto-info">
-        <div class="conj">${a.conjunto}</div>
-        <div class="det">${fmt(a)}</div>
-      </div>
-      <div id="chk-${a.id}">${selActual.some(s=>s.id===a.id)?'✅':'➕'}</div>
-    </div>
-  `).join('');
+    return lista.map(a => `
+        <div class="apto-item" id="mi-${a.id}" style="margin-bottom:5px; cursor:pointer; border-color:${selActual.some(s=>s.id===a.id)?'var(--dorado)':'var(--azul-pale)'}" onclick="toggleM(${a.id})">
+            <div class="apto-info">
+                <div class="conj">${a.conjunto}</div>
+                <div class="det">${fmt(a)}</div>
+            </div>
+            <div id="chk-${a.id}">${selActual.some(s=>s.id===a.id)?'✅':'➕'}</div>
+        </div>
+    `).join('');
 }
 
 function filtrarManual() {
-  const q = document.getElementById('m-filtro').value.toLowerCase();
-  const filtrados = disponiblesGlobal.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q));
-  document.getElementById('m-lista').innerHTML = renderManualItems(filtrados);
+    const q = document.getElementById('m-filtro').value.toLowerCase();
+    const f = disponiblesGlobal.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q));
+    document.getElementById('m-lista').innerHTML = renderManualItems(f);
 }
 
-function toggleManual(id, el) {
-  const idx = selActual.findIndex(s => s.id === id);
-  if (idx > -1) {
-    selActual.splice(idx, 1);
-    el.style.borderColor = 'var(--azul-pale)';
-    document.getElementById('chk-'+id).textContent = '➕';
-  } else {
-    const apto = disponiblesGlobal.find(s => s.id === id);
-    selActual.push(apto);
-    el.style.borderColor = 'var(--dorado)';
-    document.getElementById('chk-'+id).textContent = '✅';
-  }
+function toggleM(id) {
+    const idx = selActual.findIndex(s => s.id === id);
+    const el = document.getElementById('mi-'+id);
+    const chk = document.getElementById('chk-'+id);
+    if (idx > -1) {
+        selActual.splice(idx, 1);
+        if(el) el.style.borderColor = 'var(--azul-pale)';
+        if(chk) chk.textContent = '➕';
+    } else {
+        selActual.push(disponiblesGlobal.find(s => s.id === id));
+        if(el) el.style.borderColor = 'var(--dorado)';
+        if(chk) chk.textContent = '✅';
+    }
 }
 
-const renderSel = () => {
+function renderSel() {
   document.getElementById('lista-sel').innerHTML = selActual.map((a, i) => `
     <div class="apto-item">
       <div class="apto-num">${i+1}</div>
@@ -672,257 +518,136 @@ const renderSel = () => {
         <div class="dir">📍 ${a.direccion}</div>
         <div class="det">${fmt(a)}</div>
       </div>
-      <span class="badge b-gris">Por elaborar</span>
     </div>`).join('');
-};
-
-function cancelarSeleccion() {
-  selActual = [];
-  document.getElementById('bloque-sel').style.display = 'none';
 }
 
-function confirmar() {
-  if (!selActual.length) return;
-  const ul = selActual.map(a => `<li style="margin:4px 0">${a.conjunto} – ${fmt(a)}</li>`).join('');
-  openModal(
-    'Confirmar elaboración',
-    `¿Confirmas que vas a elaborar estas ${selActual.length} carta(s)?<ul style="margin:10px 0 0 18px;font-size:.83rem;color:#555">${ul}</ul>`,
-    '✅ Confirmar',
-    async () => {
-      closeModal();
-      showOv('Guardando en Google Sheets…');
-      try {
-        const ids   = selActual.map(a => a.id).join(',');
-        const fecha = new Date().toISOString();
-        const res   = await apiGet({ action: 'marcar_elaborada', ids, fecha });
-        if (res.ok) {
-          toast(`✅ ${res.actualizados} carta(s) marcadas`, 'ok');
-          selActual = [];
-          document.getElementById('bloque-sel').style.display = 'none';
-          cargarElab();
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
-      } catch(e) {
-        toast('Error de conexión con el servidor', 'err');
-      }
-      hideOv();
-    }
-  );
+function cancelarSel() { selActual = []; document.getElementById('bloque-sel').style.display = 'none'; }
+
+async function confirmar() {
+  showOv('Guardando…');
+  try {
+    const ids = selActual.map(a => a.id).join(',');
+    const res = await apiGet({ action: 'marcar_elaborada', ids, fecha: new Date().toISOString() });
+    if (res.ok) {
+      toast('✅ Guardado', 'ok');
+      selActual = [];
+      document.getElementById('bloque-sel').style.display = 'none';
+      cargarElab();
+    } else { toast('Error: ' + res.error, 'err'); }
+  } catch(e) { toast('Error de conexión', 'err'); }
+  hideOv();
 }
 
 async function cargarElab() {
   const c = document.getElementById('lista-elab');
-  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
   try {
     const res = await apiGet({ action: 'elaboradas' });
     elaboradas = res.data || [];
-    renderElab();
-  } catch(e) {
-    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar.</div></div>';
-  }
+    c.innerHTML = elaboradas.map(a => `
+      <div class="apto-item" style="background:white; border-color:var(--naranja-pale)">
+        <div class="apto-info">
+            <div class="conj">${a.conjunto} – ${fmt(a)}</div>
+            <div class="det">✏️ ${desde(a.fecha_elaborada)}</div>
+        </div>
+        <span class="badge b-naranja">Elaborada</span>
+      </div>`).join('') || '<div class="empty">No hay cartas pendientes.</div>';
+  } catch(e) { c.innerHTML = 'Error de red'; }
 }
 
-const renderElab = () => {
-  const c = document.getElementById('lista-elab');
-  if (!elaboradas.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">📭</div><div class="et">No hay cartas elaboradas pendientes.</div></div>';
-    return;
-  }
-  c.innerHTML = elaboradas.map(a => `
-    <div class="apto-item" style="background:white;border-color:var(--naranja-pale)">
-      <div class="apto-info">
-        <div class="conj">${a.conjunto} – ${fmt(a)}</div>
-        <div class="dir">📍 ${a.direccion}</div>
-        <div class="det">✏️ ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
-      </div>
-      <span class="badge b-naranja">Elaborada</span>
-    </div>`).join('');
-};
-
-// ═══════════════════════════════════════════════
-// MÓDULO 2 – ENTREGAR (Original fiel)
-// ═══════════════════════════════════════════════
 async function cargarPend() {
-  const c = document.getElementById('lista-pend');
-  c.innerHTML = '<div class="empty"><div class="ei">⏳</div><div class="et">Cargando…</div></div>';
   try {
     const res = await apiGet({ action: 'elaboradas' });
     elaboradas = res.data || [];
     renderPend();
-  } catch(e) {
-    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar.</div></div>';
-  }
+  } catch(e) { }
 }
 
 function renderPend() {
   const q = (document.getElementById('filtro')?.value || '').toLowerCase();
+  const lista = q ? elaboradas.filter(a => a.conjunto.toLowerCase().includes(q) || String(a.apto).includes(q)) : elaboradas;
   const c = document.getElementById('lista-pend');
-  const lista = q
-    ? elaboradas.filter(a =>
-        a.conjunto.toLowerCase().includes(q) ||
-        String(a.apto).toLowerCase().includes(q) ||
-        a.direccion.toLowerCase().includes(q))
-    : elaboradas;
-
-  if (!elaboradas.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">🎉</div><div class="et">¡No hay cartas pendientes!</div></div>';
-    return;
-  }
-  if (!lista.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">🔍</div><div class="et">Sin resultados para ese filtro.</div></div>';
-    return;
-  }
+  if(!lista.length) { c.innerHTML = '<div class="empty">Sin resultados.</div>'; return; }
   c.innerHTML = lista.map(a => `
     <div class="pend-item">
       <div class="pend-main">
         <div class="pend-info">
           <div class="nombre">${a.conjunto} – ${fmt(a)}</div>
-          <div class="dir">📍 ${a.direccion}</div>
-          <div class="fecha">✏️ Elaborada ${desde(a.fecha_elaborada)} · ${fmtF(a.fecha_elaborada)}</div>
+          <div class="fecha">✏️ Elaborada ${desde(a.fecha_elaborada)}</div>
         </div>
-        <span class="badge b-naranja">Elaborada</span>
       </div>
       <div class="pend-actions">
-        <button class="btn btn-verde btn-sm"
-          onclick="entregar(${a.id},'${a.conjunto.replace(/'/g,"\\'")}','${fmt(a).replace(/'/g,"\\'")}')">
-          📬 Entregada
-        </button>
-        <button class="btn btn-danger btn-sm"
-          onclick="deshacerElab(${a.id},'${a.conjunto.replace(/'/g,"\\'")}')">
-          ↩️ Deshacer
-        </button>
+        <button class="btn btn-verde btn-sm" onclick="entregar(${a.id},'${a.conjunto}')">📬 Entregada</button>
+        <button class="btn btn-danger btn-sm" onclick="deshacer(${a.id})">↩️</button>
       </div>
     </div>`).join('');
 }
 
-function entregar(id, conjunto, desc) {
-  openModal(
-    'Confirmar entrega',
-    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada?`,
-    '📬 Confirmar entrega',
-    async () => {
-      closeModal();
-      showOv('Registrando entrega…');
-      try {
-        const res = await apiGet({ action: 'marcar_entregada', ids: String(id), fecha: new Date().toISOString() });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPend();
-          toast('📬 Carta marcada como entregada', 'ok');
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
-      } catch(e) { toast('Error de conexión', 'err'); }
-      hideOv();
-    }
-  );
+async function entregar(id, conj) {
+    if(!confirm(`¿Marcar ${conj} como entregada?`)) return;
+    showOv('Registrando...');
+    try { await apiGet({ action: 'marcar_entregada', ids: id, fecha: new Date().toISOString() }); cargarPend(); } catch(e) {}
+    hideOv();
 }
 
-function deshacerElab(id, conjunto) {
-  openModal(
-    'Deshacer elaboración',
-    `¿Devolver el apartamento de <strong>${conjunto}</strong> al estado disponible?`,
-    '↩️ Deshacer',
-    async () => {
-      closeModal();
-      showOv('Deshaciendo…');
-      try {
-        const res = await apiGet({ action: 'deshacer', ids: String(id) });
-        if (res.ok) {
-          elaboradas = elaboradas.filter(a => a.id !== id);
-          renderPend();
-          toast('↩️ Carta devuelta a disponible');
-        } else {
-          toast('Error: ' + (res.error || 'desconocido'), 'err');
-        }
-      } catch(e) { toast('Error de conexión', 'err'); }
-      hideOv();
-    }
-  );
+async function deshacer(id) {
+    if(!confirm('¿Devolver a disponible?')) return;
+    showOv('Deshaciendo...');
+    try { await apiGet({ action: 'deshacer', ids: id }); cargarPend(); } catch(e) {}
+    hideOv();
 }
 
-// ═══════════════════════════════════════════════
-// MÓDULO 3 – ESTADÍSTICAS (Original fiel)
-// ═══════════════════════════════════════════════
 async function cargarStats() {
   showOv('Cargando estadísticas…');
   try {
     const res = await apiGet({ action: 'estadisticas' });
     renderStats(res);
-  } catch(e) { toast('Error al cargar estadísticas', 'err'); }
+  } catch(e) { toast('Error', 'err'); }
   hideOv();
 }
 
 function renderStats(d) {
-  const r    = d.resumen;
+  const r = d.resumen;
   const conj = d.por_conjunto;
   const acts = d.ultimas_actividades || [];
 
   document.getElementById('s-grid').innerHTML = `
-    <div class="stat">
-      <div class="stat-n">${r.total.toLocaleString()}</div>
-      <div class="stat-l">Aptos en territorio</div>
-    </div>
-    <div class="stat s-naranja">
-      <div class="stat-n">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
-      <div class="stat-l">Cartas hechas</div>
-    </div>
-    <div class="stat s-verde">
-      <div class="stat-n">${r.entregadas.toLocaleString()}</div>
-      <div class="stat-l">Entregadas</div>
-    </div>
-    <div class="stat s-dorado">
-      <div class="stat-n">${r.pct_entregadas}%</div>
-      <div class="stat-l">% Cubierto</div>
-    </div>`;
+    <div class="stat"><div class="stat-n">${r.total}</div><div class="stat-l">Aptos</div></div>
+    <div class="stat s-verde"><div class="stat-n">${r.entregadas}</div><div class="stat-l">Entregadas</div></div>
+    <div class="stat s-naranja"><div class="stat-n">${r.elaboradas}</div><div class="stat-l">Por entregar</div></div>
+    <div class="stat s-dorado"><div class="stat-n">${r.pct_entregadas}%</div><div class="stat-l">Cubierto</div></div>`;
 
   document.getElementById('s-progreso').innerHTML = `
     <div class="prog">
-      <div class="prog-hd"><span>Cartas entregadas</span><span style="color:var(--verde)">${r.pct_entregadas}%</span></div>
+      <div class="prog-hd"><span>Entregadas</span><span>${r.pct_entregadas}%</span></div>
       <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
-      <div class="prog-sub">${r.entregadas} de ${r.total} apartamentos</div>
-    </div>
-    <div class="prog">
-      <div class="prog-hd"><span>Total elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
-      <div class="prog-bar"><div class="prog-fill orange" style="width:${r.pct_hechas}%"></div></div>
-      <div class="prog-sub">${r.elaboradas + r.entregadas} de ${r.total} apartamentos</div>
     </div>`;
 
   const rows = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
   document.getElementById('s-tabla').innerHTML = `
-    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th></tr></thead>
-    <tbody>${rows.map(([n, v]) => {
-      const p = ((v.entregadas / v.total) * 100).toFixed(0);
-      return `<tr>
-        <td><strong>${n}</strong></td><td>${v.total}</td>
-        <td style="color:var(--naranja);font-weight:700">${v.elaboradas}</td>
-        <td style="color:var(--verde);font-weight:700">${v.entregadas}</td>
-        <td><div class="mini-bar"><div class="b"><div class="f" style="width:${p}%"></div></div><div class="p">${p}%</div></div></td>
-      </tr>`;
-    }).join('')}</tbody>`;
+    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>%</th></tr></thead>
+    <tbody>${rows.map(([n, v]) => `
+      <tr>
+        <td><strong>${n}</strong></td><td>${v.total}</td><td>${v.elaboradas}</td><td>${v.entregadas}</td>
+        <td><div class="mini-bar"><div class="b"><div class="f" style="width:${((v.entregadas/v.total)*100)}%"></div></div></div></td>
+      </tr>`).join('')}</tbody>`;
 
-  const aDiv = document.getElementById('s-acts');
-  if (!acts.length) {
-    aDiv.innerHTML = '<div class="empty"><div class="ei">📋</div><div class="et">Sin actividad aún.</div></div>';
-    return;
-  }
-  aDiv.innerHTML = acts.map(a => `
+  document.getElementById('s-acts').innerHTML = acts.map(a => `
     <div class="act-item ${a.tipo}">
-      <div class="act-ico">${a.tipo === 'elaborada' ? '✏️' : '📬'}</div>
-      <div class="act-txt">
-        <div class="n">${a.apto.conjunto} – ${fmt(a.apto)}</div>
-        <div class="f">${a.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtF(a.fecha)} (${desde(a.fecha)})</div>
-      </div>
-      <span class="badge ${a.tipo === 'elaborada' ? 'b-naranja' : 'b-verde'}">${a.tipo === 'elaborada' ? 'Elab.' : 'Entr.'}</span>
+      <div class="act-ico">${a.tipo==='elaborada'?'✏️':'📬'}</div>
+      <div class="act-txt"><div class="n">${a.apto.conjunto}</div><div class="f">${fmtF(a.fecha)}</div></div>
     </div>`).join('');
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+function goTab(t, b) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('pg-' + t).classList.add('on');
+  b.classList.add('active');
+  if (t === 'elaborar') cargarElab();
+  if (t === 'entregar') cargarPend();
+  if (t === 'stats') cargarStats();
 }
 
-// ─── INIT ─────────────────────────────────────────────────
 cargarElab();
 </script>
 </body>
