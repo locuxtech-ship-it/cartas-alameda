@@ -1258,6 +1258,14 @@ async function exportarPDF(tipo) {
 // ─── SERVICE WORKER ───────────────────────────────────────
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
+  // Cuando se active una versión nueva del Service Worker, recargar
+  // automáticamente para que el usuario vea los cambios sin pasos manuales.
+  let yaRecargo = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (yaRecargo) return;
+    yaRecargo = true;
+    window.location.reload();
+  });
 }
 
 // ─── INIT ─────────────────────────────────────────────────
