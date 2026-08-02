@@ -547,8 +547,9 @@ body {
 
 <!-- ══════ ESTADÍSTICAS ══════ -->
 <div class="page" id="pg-stats">
-  <div class="pdf-btn-row">
-    <button class="btn btn-primary btn-full" onclick="exportarPDF()">📄 Exportar informe PDF</button>
+  <div class="pdf-btn-row" style="display:flex;gap:10px">
+    <button class="btn btn-primary" style="flex:1" onclick="exportarPDF('general')">📄 Informe general</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="exportarPDF('detallado')">📋 Informe detallado</button>
   </div>
   <div class="stats-grid" id="s-grid"></div>
   <div class="card">
@@ -1085,14 +1086,14 @@ function renderStats(d) {
 // ═══════════════════════════════════════════════
 // EXPORTAR PDF
 // ═══════════════════════════════════════════════
-async function exportarPDF() {
-  showOv('Generando informe PDF…');
+async function exportarPDF(tipo) {
+  showOv(tipo === 'detallado' ? 'Generando informe detallado…' : 'Generando informe general…');
   try {
-    const [statsRes, elabRes, entrRes] = await Promise.all([
-      apiGet({ action: 'estadisticas' }),
-      apiGet({ action: 'elaboradas' }),
-      apiGet({ action: 'entregadas' })
-    ]);
+    const peticiones = [apiGet({ action: 'estadisticas' })];
+    if (tipo === 'detallado') {
+      peticiones.push(apiGet({ action: 'elaboradas' }), apiGet({ action: 'entregadas' }));
+    }
+    const [statsRes, elabRes, entrRes] = await Promise.all(peticiones);
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: 'pt', format: 'letter' });
@@ -1115,7 +1116,9 @@ async function exportarPDF() {
     doc.setFont('helvetica','bold'); doc.setFontSize(18);
     doc.text('Alameda del Río', 40, 32);
     doc.setFont('helvetica','normal'); doc.setFontSize(10);
-    doc.text('Informe de gestión de cartas — Territorio', 40, 48);
+    doc.text(tipo === 'detallado'
+      ? 'Informe detallado de gestión de cartas — Territorio'
+      : 'Informe general de gestión de cartas — Territorio', 40, 48);
     doc.setFontSize(9);
     doc.text(new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'}), 40, 62);
     y = 96;
@@ -1179,57 +1182,59 @@ async function exportarPDF() {
     });
     y += 16;
 
-    // Listado detallado – elaboradas
-    checkPageBreak(60);
-    doc.setFont('helvetica','bold'); doc.setFontSize(13);
-    doc.setTextColor(...azulNoche);
-    doc.text(`Cartas elaboradas pendientes de entrega (${elabRes.data.length})`, 40, y); y += 18;
+    if (tipo === 'detallado') {
+      // Listado detallado – elaboradas
+      checkPageBreak(60);
+      doc.setFont('helvetica','bold'); doc.setFontSize(13);
+      doc.setTextColor(...azulNoche);
+      doc.text(`Cartas elaboradas pendientes de entrega (${elabRes.data.length})`, 40, y); y += 18;
 
-    if (!elabRes.data.length) {
-      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
-      doc.text('No hay cartas elaboradas pendientes.', 40, y); y += 16;
-    } else {
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
-      doc.text('Conjunto / Apartamento', 40, y);
-      doc.text('Dirección', 260, y);
-      doc.text('Fecha elaborada', 440, y);
-      y += 6; doc.line(40, y, 555, y); y += 14;
-      doc.setFont('helvetica','normal'); doc.setFontSize(9);
-      elabRes.data.forEach(a => {
-        checkPageBreak(15);
-        doc.setTextColor(30,30,30);
-        doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
-        doc.text(String(a.direccion).slice(0,32), 260, y);
-        doc.text(fmtF(a.fecha_elaborada), 440, y);
-        y += 14;
-      });
-    }
-    y += 16;
+      if (!elabRes.data.length) {
+        doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
+        doc.text('No hay cartas elaboradas pendientes.', 40, y); y += 16;
+      } else {
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+        doc.text('Conjunto / Apartamento', 40, y);
+        doc.text('Dirección', 260, y);
+        doc.text('Fecha elaborada', 440, y);
+        y += 6; doc.line(40, y, 555, y); y += 14;
+        doc.setFont('helvetica','normal'); doc.setFontSize(9);
+        elabRes.data.forEach(a => {
+          checkPageBreak(15);
+          doc.setTextColor(30,30,30);
+          doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
+          doc.text(String(a.direccion).slice(0,32), 260, y);
+          doc.text(fmtF(a.fecha_elaborada), 440, y);
+          y += 14;
+        });
+      }
+      y += 16;
 
-    // Listado detallado – entregadas
-    checkPageBreak(60);
-    doc.setFont('helvetica','bold'); doc.setFontSize(13);
-    doc.setTextColor(...azulNoche);
-    doc.text(`Cartas entregadas (${entrRes.data.length})`, 40, y); y += 18;
+      // Listado detallado – entregadas
+      checkPageBreak(60);
+      doc.setFont('helvetica','bold'); doc.setFontSize(13);
+      doc.setTextColor(...azulNoche);
+      doc.text(`Cartas entregadas (${entrRes.data.length})`, 40, y); y += 18;
 
-    if (!entrRes.data.length) {
-      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
-      doc.text('Aún no se han registrado entregas.', 40, y); y += 16;
-    } else {
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
-      doc.text('Conjunto / Apartamento', 40, y);
-      doc.text('Dirección', 260, y);
-      doc.text('Fecha entregada', 440, y);
-      y += 6; doc.line(40, y, 555, y); y += 14;
-      doc.setFont('helvetica','normal'); doc.setFontSize(9);
-      entrRes.data.forEach(a => {
-        checkPageBreak(15);
-        doc.setTextColor(30,30,30);
-        doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
-        doc.text(String(a.direccion).slice(0,32), 260, y);
-        doc.text(fmtF(a.fecha_entregada), 440, y);
-        y += 14;
-      });
+      if (!entrRes.data.length) {
+        doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
+        doc.text('Aún no se han registrado entregas.', 40, y); y += 16;
+      } else {
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+        doc.text('Conjunto / Apartamento', 40, y);
+        doc.text('Dirección', 260, y);
+        doc.text('Fecha entregada', 440, y);
+        y += 6; doc.line(40, y, 555, y); y += 14;
+        doc.setFont('helvetica','normal'); doc.setFontSize(9);
+        entrRes.data.forEach(a => {
+          checkPageBreak(15);
+          doc.setTextColor(30,30,30);
+          doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
+          doc.text(String(a.direccion).slice(0,32), 260, y);
+          doc.text(fmtF(a.fecha_entregada), 440, y);
+          y += 14;
+        });
+      }
     }
 
     // Pie de página en todas las páginas
@@ -1241,8 +1246,9 @@ async function exportarPDF() {
       doc.text(`Alameda del Río — Página ${i} de ${totalPages}`, 40, 790);
     }
 
-    doc.save(`Informe_Alameda_del_Rio_${new Date().toISOString().slice(0,10)}.pdf`);
-    toast('📄 Informe PDF generado', 'ok');
+    const sufijo = tipo === 'detallado' ? 'Detallado' : 'General';
+    doc.save(`Informe_${sufijo}_Alameda_del_Rio_${new Date().toISOString().slice(0,10)}.pdf`);
+    toast(`📄 Informe ${tipo === 'detallado' ? 'detallado' : 'general'} generado`, 'ok');
   } catch(e) {
     toast('Error al generar el PDF', 'err');
   }
