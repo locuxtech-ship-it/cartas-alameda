@@ -1,4 +1,4 @@
-const CACHE = 'ar-cartas-v1';
+const CACHE = 'ar-cartas-v2';
 const ASSETS = [
   './',
   './index.html',

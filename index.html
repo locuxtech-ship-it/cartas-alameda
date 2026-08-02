@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Alameda del Río</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --azul-noche:  #0f2557;
@@ -338,9 +339,93 @@ body {
 .toast.on { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.ok  { background: var(--verde); }
 .toast.err { background: var(--rojo); }
+
+/* ── LOGIN ───────────────────────────────────── */
+.login-screen {
+  position: fixed; inset: 0; z-index: 500;
+  background: linear-gradient(160deg, var(--azul-noche) 0%, var(--azul-real) 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.login-box {
+  background: white; border-radius: 20px;
+  padding: 32px 26px; max-width: 360px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  text-align: center;
+}
+.login-logo {
+  width: 64px; height: 64px; margin: 0 auto 16px;
+  background: var(--azul-noche); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.login-logo .logo-sobre { width: 38px; height: 27px; background: white; border-radius: 3px; position: relative; }
+.login-logo .logo-solapa { position: absolute; top:0; left:0; right:0; height:0; border-left:19px solid transparent; border-right:19px solid transparent; border-top:14px solid var(--azul-claro); }
+.login-logo .logo-sello { position: absolute; bottom:1px; right:1px; width:14px; height:14px; border-radius:50%; background:var(--dorado); font-size:7px; font-weight:700; color:var(--azul-noche); display:flex; align-items:center; justify-content:center; }
+.login-box h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--azul-noche); margin-bottom: 4px; }
+.login-box p { font-size: .84rem; color: var(--texto-3); margin-bottom: 22px; }
+.login-box input {
+  width: 100%; padding: 13px 14px; border: 2px solid var(--gris-2);
+  border-radius: 10px; font-family: 'Barlow', sans-serif; font-size: 1rem;
+  text-align: center; letter-spacing: .06em; margin-bottom: 12px;
+  -webkit-appearance: none;
+}
+.login-box input:focus { outline: none; border-color: var(--azul-claro); }
+.login-err { color: var(--rojo); font-size: .8rem; font-weight: 600; margin-bottom: 12px; min-height: 1.2em; }
+.app-hidden { display: none !important; }
+
+/* ── ASIGNACIÓN MANUAL ──────────────────────── */
+.manual-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.manual-toggle .arrow { transition: transform .2s; font-size: .8rem; color: var(--texto-3); }
+.manual-toggle.open .arrow { transform: rotate(180deg); }
+.manual-body { display: none; margin-top: 14px; }
+.manual-body.open { display: block; }
+.select-conjunto {
+  width: 100%; padding: 12px 14px; border: 2px solid var(--gris-2);
+  border-radius: 9px; font-family: 'Barlow', sans-serif; font-size: .95rem;
+  color: var(--texto); background: white; margin-bottom: 12px;
+  -webkit-appearance: none; appearance: none;
+}
+.select-conjunto:focus { outline: none; border-color: var(--azul-claro); }
+.manual-apto-list { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.manual-apto-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 9px;
+  border: 1.5px solid var(--gris-2); background: var(--gris-1);
+  cursor: pointer; transition: border-color .15s, background .15s;
+}
+.manual-apto-item.checked { border-color: var(--azul-claro); background: var(--azul-bg); }
+.manual-apto-item input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--azul-medio); }
+.manual-apto-item .txt { font-size: .87rem; flex: 1; }
+.manual-count { font-size: .78rem; color: var(--texto-3); margin-bottom: 10px; }
+
+/* ── PDF BUTTON ──────────────────────────────── */
+.pdf-btn-row { margin-top: 6px; margin-bottom: 14px; }
 </style>
 </head>
 <body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-sobre">
+        <div class="logo-solapa"></div>
+        <div class="logo-sello">AR</div>
+      </div>
+    </div>
+    <h2>Alameda del Río</h2>
+    <p style="margin-bottom:4px">Gestión del Territorio de Cartas de la Congregación</p>
+    <p>Ingresa la contraseña del equipo para continuar</p>
+    <input type="password" id="login-input" placeholder="Contraseña" inputmode="text" autocomplete="off">
+    <div class="login-err" id="login-err"></div>
+    <button class="btn btn-primary btn-full" onclick="intentarLogin()">Ingresar</button>
+  </div>
+</div>
+
+<div id="app-root" class="app-hidden">
 
 <!-- OVERLAY LOADING -->
 <div class="overlay" id="ov">
@@ -402,7 +487,7 @@ body {
     <div class="card-sub">El sistema elige un apartamento por conjunto de forma aleatoria.</div>
     <div class="field">
       <label>¿Cuántas cartas vas a escribir?</label>
-      <input type="number" id="n-cartas" min="1" max="12" value="1" inputmode="numeric">
+      <input type="number" id="n-cartas" min="1" max="12" value="6" inputmode="numeric">
     </div>
     <button class="btn btn-primary btn-full" onclick="generar()">🎲 Generar selección</button>
   </div>
@@ -416,6 +501,26 @@ body {
         <button class="btn btn-dorado" onclick="confirmar()">✅ Confirmar elaboración</button>
         <button class="btn btn-ghost"  onclick="generar()">🔄 Regenerar</button>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="manual-toggle" id="manual-toggle" onclick="toggleManual()">
+      <div>
+        <div class="card-h">Asignación manual</div>
+        <div class="card-sub" style="margin-bottom:0">Elige tú mismo el conjunto y el apartamento.</div>
+      </div>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="manual-body" id="manual-body">
+      <select class="select-conjunto" id="manual-select-conjunto" onchange="cargarAptosManual()">
+        <option value="">Selecciona un conjunto…</option>
+      </select>
+      <div class="manual-count" id="manual-count"></div>
+      <div class="manual-apto-list" id="manual-apto-list"></div>
+      <button class="btn btn-dorado btn-full" onclick="confirmarManual()" id="btn-manual-confirmar" disabled>
+        ✅ Marcar seleccionados como Elaborada
+      </button>
     </div>
   </div>
 
@@ -442,6 +547,9 @@ body {
 
 <!-- ══════ ESTADÍSTICAS ══════ -->
 <div class="page" id="pg-stats">
+  <div class="pdf-btn-row">
+    <button class="btn btn-primary btn-full" onclick="exportarPDF()">📄 Exportar informe PDF</button>
+  </div>
   <div class="stats-grid" id="s-grid"></div>
   <div class="card">
     <div class="card-h">Progreso global</div>
@@ -458,9 +566,38 @@ body {
   </div>
 </div>
 
+</div><!-- /app-root -->
+
 <script>
 // ─── CONFIG ────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbwgbZ93OiI27C0pFrf-jEDAUFRU9QMcABOuWJCpKwoXbDyVv58e_LsC4SqKt6JnIspJ/exec';
+
+// ─── ACCESO POR CONTRASEÑA ───────────────────────────────
+// Cambia esta contraseña por la que quieras usar con el equipo.
+const CLAVE_EQUIPO = 'alameda2025';
+const LS_AUTH_KEY = 'ar_cartas_auth';
+
+function intentarLogin() {
+  const val = document.getElementById('login-input').value;
+  if (val === CLAVE_EQUIPO) {
+    sessionStorage.setItem(LS_AUTH_KEY, '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-root').classList.remove('app-hidden');
+    document.getElementById('login-err').textContent = '';
+  } else {
+    document.getElementById('login-err').textContent = 'Contraseña incorrecta. Intenta de nuevo.';
+    document.getElementById('login-input').value = '';
+    document.getElementById('login-input').focus();
+  }
+}
+document.getElementById('login-input')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') intentarLogin();
+});
+// Si ya inició sesión en esta pestaña/sesión, saltar el login
+if (sessionStorage.getItem(LS_AUTH_KEY) === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-root').classList.remove('app-hidden');
+}
 
 // ─── ESTADO ─────────────────────────────────────────────
 let elaboradas  = [];
@@ -525,31 +662,19 @@ window.addEventListener('online',  () => setOnline(true));
 window.addEventListener('offline', () => setOnline(false));
 setOnline(navigator.onLine);
 
+// ─── BANNER ──────────────────────────────────────────────
 const showBanner = msg => {
   document.getElementById('banner-txt').textContent = msg;
   document.getElementById('banner').classList.add('show');
 };
 const hideBanner = () => document.getElementById('banner').classList.remove('show');
 
-// ─── API FETCH ───────────────────────────────────────────
-
-// GET: Para lectura (disponibles, elaboradas, estadisticas)
+// ─── FETCH GET (con parámetros en query string) ──────────
 const apiGet = async params => {
   const qs  = new URLSearchParams(params).toString();
   const res = await fetch(`${API}?${qs}`, { redirect: 'follow' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
-};
-
-// POST: Para escritura (marcar_elaborada, marcar_entregada, deshacer)
-// Usamos mode: 'no-cors' para evitar errores de conexión/CORS en navegadores móviles
-const apiPost = async data => {
-  return fetch(API, {
-    method: 'POST',
-    mode: 'no-cors', 
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(data)
-  });
 };
 
 // ─── TABS ─────────────────────────────────────────────────
@@ -573,6 +698,7 @@ async function generar() {
     const res = await apiGet({ action: 'disponibles' });
     setOnline(true); hideBanner();
 
+    // Agrupar por conjunto
     const map = {};
     (res.data || []).forEach(a => {
       if (!map[a.conjunto]) map[a.conjunto] = [];
@@ -591,7 +717,7 @@ async function generar() {
     setTimeout(() => bl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
   } catch(e) {
     setOnline(false);
-    showBanner('Sin conexión con el servidor.');
+    showBanner('No se pudo conectar. Verifica tu conexión a internet.');
     toast('Error de conexión', 'err');
   }
   hideOv();
@@ -610,7 +736,7 @@ const renderSel = () => {
     </div>`).join('');
 };
 
-async function confirmar() {
+function confirmar() {
   if (!selActual.length) return;
   const ul = selActual.map(a => `<li style="margin:4px 0">${a.conjunto} – ${fmt(a)}</li>`).join('');
   openModal(
@@ -621,23 +747,21 @@ async function confirmar() {
       closeModal();
       showOv('Guardando en Google Sheets…');
       try {
-        await apiPost({
-          action: 'marcar_elaborada',
-          ids: selActual.map(a => a.id),
-          fecha: new Date().toISOString()
-        });
-        // Espera breve para que Google procese y recargamos
-        setTimeout(() => {
-          toast(`✅ Cartas procesadas correctamente`, 'ok');
+        const ids   = selActual.map(a => a.id).join(',');
+        const fecha = new Date().toISOString();
+        const res   = await apiGet({ action: 'marcar_elaborada', ids, fecha });
+        if (res.ok) {
+          toast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'ok');
           selActual = [];
           document.getElementById('bloque-sel').style.display = 'none';
           cargarElab();
-          hideOv();
-        }, 1500);
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
       } catch(e) {
-        toast('Error al guardar', 'err');
-        hideOv();
+        toast('Error de conexión', 'err');
       }
+      hideOv();
     }
   );
 }
@@ -650,7 +774,7 @@ async function cargarElab() {
     elaboradas = res.data || [];
     renderElab();
   } catch(e) {
-    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar.</div></div>';
+    c.innerHTML = '<div class="empty"><div class="ei">⚠️</div><div class="et">Error al cargar. Verifica conexión.</div></div>';
   }
 }
 
@@ -670,6 +794,115 @@ const renderElab = () => {
       <span class="badge b-naranja">Elaborada</span>
     </div>`).join('');
 };
+
+// ═══════════════════════════════════════════════
+// ASIGNACIÓN MANUAL
+// ═══════════════════════════════════════════════
+let disponiblesManual = [];
+let seleccionManual = new Set();
+
+async function toggleManual() {
+  const body = document.getElementById('manual-body');
+  const toggle = document.getElementById('manual-toggle');
+  const abrir = !body.classList.contains('open');
+  body.classList.toggle('open', abrir);
+  toggle.classList.toggle('open', abrir);
+  if (abrir && !disponiblesManual.length) {
+    await cargarDisponiblesManual();
+  }
+}
+
+async function cargarDisponiblesManual() {
+  showOv('Cargando conjuntos…');
+  try {
+    const res = await apiGet({ action: 'disponibles' });
+    disponiblesManual = res.data || [];
+    const conjuntos = [...new Set(disponiblesManual.map(a => a.conjunto))].sort();
+    const sel = document.getElementById('manual-select-conjunto');
+    sel.innerHTML = '<option value="">Selecciona un conjunto…</option>' +
+      conjuntos.map(c => `<option value="${c}">${c}</option>`).join('');
+  } catch(e) {
+    toast('Error al cargar conjuntos', 'err');
+  }
+  hideOv();
+}
+
+function cargarAptosManual() {
+  const conjunto = document.getElementById('manual-select-conjunto').value;
+  seleccionManual.clear();
+  actualizarBotonManual();
+  const cont = document.getElementById('manual-apto-list');
+  const countDiv = document.getElementById('manual-count');
+
+  if (!conjunto) {
+    cont.innerHTML = '';
+    countDiv.textContent = '';
+    return;
+  }
+
+  const aptos = disponiblesManual
+    .filter(a => a.conjunto === conjunto)
+    .sort((a,b) => a.apto.localeCompare(b.apto, undefined, {numeric:true}));
+
+  countDiv.textContent = `${aptos.length} apartamento(s) disponible(s) en ${conjunto}`;
+
+  if (!aptos.length) {
+    cont.innerHTML = '<div class="empty"><div class="ei">📭</div><div class="et">No hay apartamentos disponibles en este conjunto.</div></div>';
+    return;
+  }
+
+  cont.innerHTML = aptos.map(a => `
+    <label class="manual-apto-item" id="manual-item-${a.id}">
+      <input type="checkbox" onchange="toggleAptoManual(${a.id}, this.checked)">
+      <span class="txt">${fmt(a)} — <span style="color:var(--texto-3)">${a.direccion}</span></span>
+    </label>`).join('');
+}
+
+function toggleAptoManual(id, checked) {
+  if (checked) seleccionManual.add(id);
+  else seleccionManual.delete(id);
+  document.getElementById(`manual-item-${id}`).classList.toggle('checked', checked);
+  actualizarBotonManual();
+}
+
+function actualizarBotonManual() {
+  const btn = document.getElementById('btn-manual-confirmar');
+  btn.disabled = seleccionManual.size === 0;
+  btn.textContent = seleccionManual.size
+    ? `✅ Marcar ${seleccionManual.size} apartamento(s) como Elaborada`
+    : '✅ Marcar seleccionados como Elaborada';
+}
+
+function confirmarManual() {
+  if (!seleccionManual.size) return;
+  const ids = [...seleccionManual];
+  const elegidos = disponiblesManual.filter(a => ids.includes(a.id));
+  const ul = elegidos.map(a => `<li style="margin:4px 0">${a.conjunto} – ${fmt(a)}</li>`).join('');
+  openModal(
+    'Confirmar asignación manual',
+    `¿Confirmas que vas a elaborar estas ${ids.length} carta(s)?<ul style="margin:10px 0 0 18px;font-size:.83rem;color:#555">${ul}</ul>`,
+    '✅ Confirmar',
+    async () => {
+      closeModal();
+      showOv('Guardando en Google Sheets…');
+      try {
+        const res = await apiGet({ action: 'marcar_elaborada', ids: ids.join(','), fecha: new Date().toISOString() });
+        if (res.ok) {
+          toast(`✅ ${res.actualizados} carta(s) marcadas como elaboradas`, 'ok');
+          disponiblesManual = disponiblesManual.filter(a => !ids.includes(a.id));
+          seleccionManual.clear();
+          cargarAptosManual();
+          cargarElab();
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) {
+        toast('Error de conexión', 'err');
+      }
+      hideOv();
+    }
+  );
+}
 
 // ═══════════════════════════════════════════════
 // MÓDULO 2 – ENTREGAR
@@ -701,7 +934,7 @@ function renderPend() {
     return;
   }
   if (!lista.length) {
-    c.innerHTML = '<div class="empty"><div class="ei">🔍</div><div class="et">Sin resultados.</div></div>';
+    c.innerHTML = '<div class="empty"><div class="ei">🔍</div><div class="et">Sin resultados para ese filtro.</div></div>';
     return;
   }
   c.innerHTML = lista.map(a => `
@@ -730,20 +963,22 @@ function renderPend() {
 function entregar(id, conjunto, desc) {
   openModal(
     'Confirmar entrega',
-    `¿Confirmas la entrega en <strong>${conjunto}</strong> – ${desc}?`,
-    '📬 Confirmar',
+    `¿Confirmas que la carta de <strong>${conjunto}</strong> – ${desc} fue entregada en el apartamento?`,
+    '📬 Confirmar entrega',
     async () => {
       closeModal();
-      showOv('Registrando…');
+      showOv('Registrando entrega…');
       try {
-        await apiPost({ action: 'marcar_entregada', ids: [id], fecha: new Date().toISOString() });
-        setTimeout(() => {
+        const res = await apiGet({ action: 'marcar_entregada', ids: String(id), fecha: new Date().toISOString() });
+        if (res.ok) {
           elaboradas = elaboradas.filter(a => a.id !== id);
           renderPend();
-          toast('📬 Entrega registrada', 'ok');
-          hideOv();
-        }, 1200);
-      } catch(e) { toast('Error de conexión', 'err'); hideOv(); }
+          toast('📬 Carta marcada como entregada', 'ok');
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) { toast('Error de conexión', 'err'); }
+      hideOv();
     }
   );
 }
@@ -751,20 +986,22 @@ function entregar(id, conjunto, desc) {
 function deshacerElab(id, conjunto) {
   openModal(
     'Deshacer elaboración',
-    `¿Devolver el apartamento de <strong>${conjunto}</strong> al estado disponible?`,
+    `¿Devolver el apartamento de <strong>${conjunto}</strong> al estado disponible? Se borrarán las fechas.`,
     '↩️ Deshacer',
     async () => {
       closeModal();
       showOv('Deshaciendo…');
       try {
-        await apiPost({ action: 'deshacer', ids: [id] });
-        setTimeout(() => {
+        const res = await apiGet({ action: 'deshacer', ids: String(id) });
+        if (res.ok) {
           elaboradas = elaboradas.filter(a => a.id !== id);
           renderPend();
-          toast('↩️ Carta revertida');
-          hideOv();
-        }, 1200);
-      } catch(e) { toast('Error de conexión', 'err'); hideOv(); }
+          toast('↩️ Carta devuelta a disponible');
+        } else {
+          toast('Error: ' + (res.error || 'desconocido'), 'err');
+        }
+      } catch(e) { toast('Error de conexión', 'err'); }
+      hideOv();
     }
   );
 }
@@ -788,59 +1025,237 @@ function renderStats(d) {
 
   document.getElementById('s-grid').innerHTML = `
     <div class="stat">
-      <div class="stat-n">${r.total}</div>
-      <div class="stat-l">Aptos totales</div>
+      <div class="stat-n">${r.total.toLocaleString()}</div>
+      <div class="stat-l">Aptos en territorio</div>
     </div>
     <div class="stat s-naranja">
-      <div class="stat-n">${(parseFloat(r.elaboradas) + parseFloat(r.entregadas))}</div>
+      <div class="stat-n">${(r.elaboradas + r.entregadas).toLocaleString()}</div>
       <div class="stat-l">Cartas hechas</div>
     </div>
     <div class="stat s-verde">
-      <div class="stat-n">${r.entregadas}</div>
+      <div class="stat-n">${r.entregadas.toLocaleString()}</div>
       <div class="stat-l">Entregadas</div>
     </div>
     <div class="stat s-dorado">
       <div class="stat-n">${r.pct_entregadas}%</div>
-      <div class="stat-l">% Avance</div>
+      <div class="stat-l">% Cubierto</div>
     </div>`;
 
   document.getElementById('s-progreso').innerHTML = `
     <div class="prog">
-      <div class="prog-hd"><span>Progreso Real (Entregadas)</span><span style="color:var(--verde)">${r.pct_entregadas}%</span></div>
+      <div class="prog-hd"><span>Cartas entregadas</span><span style="color:var(--verde)">${r.pct_entregadas}%</span></div>
       <div class="prog-bar"><div class="prog-fill" style="width:${r.pct_entregadas}%"></div></div>
+      <div class="prog-sub">${r.entregadas} de ${r.total} apartamentos</div>
     </div>
     <div class="prog">
-      <div class="prog-hd"><span>Cartas Elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
+      <div class="prog-hd"><span>Total elaboradas</span><span style="color:var(--naranja)">${r.pct_hechas}%</span></div>
       <div class="prog-bar"><div class="prog-fill orange" style="width:${r.pct_hechas}%"></div></div>
+      <div class="prog-sub">${r.elaboradas + r.entregadas} de ${r.total} apartamentos</div>
     </div>`;
 
   const rows = Object.entries(conj).sort((a,b) => b[1].total - a[1].total);
   document.getElementById('s-tabla').innerHTML = `
-    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>%</th></tr></thead>
+    <thead><tr><th>Conjunto</th><th>Total</th><th>Elab.</th><th>Entr.</th><th>Avance</th></tr></thead>
     <tbody>${rows.map(([n, v]) => {
       const p = ((v.entregadas / v.total) * 100).toFixed(0);
       return `<tr>
         <td><strong>${n}</strong></td><td>${v.total}</td>
         <td style="color:var(--naranja);font-weight:700">${v.elaboradas}</td>
         <td style="color:var(--verde);font-weight:700">${v.entregadas}</td>
-        <td>${p}%</td>
+        <td><div class="mini-bar"><div class="b"><div class="f" style="width:${p}%"></div></div><div class="p">${p}%</div></div></td>
       </tr>`;
     }).join('')}</tbody>`;
 
   const aDiv = document.getElementById('s-acts');
-  aDiv.innerHTML = acts.length ? acts.map(a => `
+  if (!acts.length) {
+    aDiv.innerHTML = '<div class="empty"><div class="ei">📋</div><div class="et">Sin actividad aún.</div></div>';
+    return;
+  }
+  aDiv.innerHTML = acts.map(a => `
     <div class="act-item ${a.tipo}">
       <div class="act-ico">${a.tipo === 'elaborada' ? '✏️' : '📬'}</div>
       <div class="act-txt">
         <div class="n">${a.apto.conjunto} – ${fmt(a.apto)}</div>
-        <div class="f">${a.tipo.toUpperCase()} · ${desde(a.fecha)}</div>
+        <div class="f">${a.tipo === 'elaborada' ? 'Elaborada' : 'Entregada'} · ${fmtF(a.fecha)} (${desde(a.fecha)})</div>
       </div>
-    </div>`).join('') : '<div class="empty">Sin actividad.</div>';
+      <span class="badge ${a.tipo === 'elaborada' ? 'b-naranja' : 'b-verde'}">${a.tipo === 'elaborada' ? 'Elab.' : 'Entr.'}</span>
+    </div>`).join('');
 }
 
+// ═══════════════════════════════════════════════
+// EXPORTAR PDF
+// ═══════════════════════════════════════════════
+async function exportarPDF() {
+  showOv('Generando informe PDF…');
+  try {
+    const [statsRes, elabRes, entrRes] = await Promise.all([
+      apiGet({ action: 'estadisticas' }),
+      apiGet({ action: 'elaboradas' }),
+      apiGet({ action: 'entregadas' })
+    ]);
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    const azulNoche = [15, 37, 87];
+    const azulMedio = [45, 91, 191];
+    const naranja   = [224, 93, 32];
+    const verde     = [26, 122, 74];
+    const gris      = [138, 149, 184];
+    const pageW = doc.internal.pageSize.getWidth();
+    let y = 50;
+
+    const checkPageBreak = (needed) => {
+      if (y + needed > 760) { doc.addPage(); y = 50; }
+    };
+
+    // Encabezado
+    doc.setFillColor(...azulNoche);
+    doc.rect(0, 0, pageW, 70, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold'); doc.setFontSize(18);
+    doc.text('Alameda del Río', 40, 32);
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Informe de gestión de cartas — Territorio', 40, 48);
+    doc.setFontSize(9);
+    doc.text(new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'}), 40, 62);
+    y = 96;
+
+    // Resumen general
+    const r = statsRes.resumen;
+    doc.setTextColor(...azulNoche);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text('Resumen general', 40, y); y += 18;
+
+    const stats = [
+      ['Apartamentos en territorio', r.total],
+      ['Cartas elaboradas (total)', r.elaboradas + r.entregadas],
+      ['Cartas entregadas', r.entregadas],
+      ['% de territorio cubierto', r.pct_entregadas + '%']
+    ];
+    doc.setFont('helvetica','normal'); doc.setFontSize(10.5);
+    stats.forEach(([label, val]) => {
+      doc.setTextColor(...gris);
+      doc.text(String(label), 40, y);
+      doc.setTextColor(...azulNoche);
+      doc.setFont('helvetica','bold');
+      doc.text(String(val), 320, y);
+      doc.setFont('helvetica','normal');
+      y += 16;
+    });
+    y += 10;
+
+    // Progreso por conjunto
+    checkPageBreak(140);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.setTextColor(...azulNoche);
+    doc.text('Progreso por conjunto', 40, y); y += 18;
+
+    doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.setTextColor(...gris);
+    doc.text('Conjunto', 40, y);
+    doc.text('Total', 260, y);
+    doc.text('Elaboradas', 320, y);
+    doc.text('Entregadas', 410, y);
+    doc.text('Avance', 500, y);
+    y += 6;
+    doc.setDrawColor(...gris); doc.line(40, y, 555, y); y += 14;
+
+    const conjEntries = Object.entries(statsRes.por_conjunto).sort((a,b) => b[1].total - a[1].total);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+    conjEntries.forEach(([nombre, d]) => {
+      checkPageBreak(16);
+      const pct = ((d.entregadas / d.total) * 100).toFixed(0) + '%';
+      doc.setTextColor(...azulNoche);
+      doc.text(nombre, 40, y);
+      doc.setTextColor(60,60,60);
+      doc.text(String(d.total), 260, y);
+      doc.setTextColor(...naranja);
+      doc.text(String(d.elaboradas), 320, y);
+      doc.setTextColor(...verde);
+      doc.text(String(d.entregadas), 410, y);
+      doc.setTextColor(60,60,60);
+      doc.text(pct, 500, y);
+      y += 15;
+    });
+    y += 16;
+
+    // Listado detallado – elaboradas
+    checkPageBreak(60);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.setTextColor(...azulNoche);
+    doc.text(`Cartas elaboradas pendientes de entrega (${elabRes.data.length})`, 40, y); y += 18;
+
+    if (!elabRes.data.length) {
+      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
+      doc.text('No hay cartas elaboradas pendientes.', 40, y); y += 16;
+    } else {
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+      doc.text('Conjunto / Apartamento', 40, y);
+      doc.text('Dirección', 260, y);
+      doc.text('Fecha elaborada', 440, y);
+      y += 6; doc.line(40, y, 555, y); y += 14;
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      elabRes.data.forEach(a => {
+        checkPageBreak(15);
+        doc.setTextColor(30,30,30);
+        doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
+        doc.text(String(a.direccion).slice(0,32), 260, y);
+        doc.text(fmtF(a.fecha_elaborada), 440, y);
+        y += 14;
+      });
+    }
+    y += 16;
+
+    // Listado detallado – entregadas
+    checkPageBreak(60);
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.setTextColor(...azulNoche);
+    doc.text(`Cartas entregadas (${entrRes.data.length})`, 40, y); y += 18;
+
+    if (!entrRes.data.length) {
+      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...gris);
+      doc.text('Aún no se han registrado entregas.', 40, y); y += 16;
+    } else {
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...gris);
+      doc.text('Conjunto / Apartamento', 40, y);
+      doc.text('Dirección', 260, y);
+      doc.text('Fecha entregada', 440, y);
+      y += 6; doc.line(40, y, 555, y); y += 14;
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      entrRes.data.forEach(a => {
+        checkPageBreak(15);
+        doc.setTextColor(30,30,30);
+        doc.text(`${a.conjunto} – ${fmt(a)}`.slice(0,42), 40, y);
+        doc.text(String(a.direccion).slice(0,32), 260, y);
+        doc.text(fmtF(a.fecha_entregada), 440, y);
+        y += 14;
+      });
+    }
+
+    // Pie de página en todas las páginas
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(...gris);
+      doc.text(`Alameda del Río — Página ${i} de ${totalPages}`, 40, 790);
+    }
+
+    doc.save(`Informe_Alameda_del_Rio_${new Date().toISOString().slice(0,10)}.pdf`);
+    toast('📄 Informe PDF generado', 'ok');
+  } catch(e) {
+    toast('Error al generar el PDF', 'err');
+  }
+  hideOv();
+}
+
+// ─── SERVICE WORKER ───────────────────────────────────────
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
+// ─── INIT ─────────────────────────────────────────────────
 cargarElab();
 </script>
+</body>
+</html>
